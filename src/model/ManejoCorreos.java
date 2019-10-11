@@ -52,7 +52,7 @@ public class ManejoCorreos {
             
 	
 	    // Subject del correo
-	    message.setSubject("Prueba desde Java");
+	    message.setSubject("Prueba Java");
 	
 	    // Contenido del correo
 	    message.setText("Email de prueba enviado desde java");
