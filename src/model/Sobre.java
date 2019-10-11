@@ -3,14 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Modelo;
+package model;
 
 /**
  *
  * @author Usuario
  */
-public enum TContenidoSobre {
+public class Sobre {
+
+    private int peso;
+
     
-    Documento, ArticuloPequeño
+    
+    
     
 }

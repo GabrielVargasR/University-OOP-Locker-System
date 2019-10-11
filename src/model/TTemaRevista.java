@@ -3,22 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Control;
+package model;
 
 /**
  *
  * @author Rayforth
  */
-public class Operador {
-
-    public Operador() {
-        
-    }
+public enum TTemaRevista {
     
-    public void enviarCorreo(){
-        
-    }
-    public void tomarDatosClientes(){
-        
-    }
+    Negocios, Moda, Tecnologia, Salud, Cocina
+    
 }

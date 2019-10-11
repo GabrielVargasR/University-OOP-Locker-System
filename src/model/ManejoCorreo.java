@@ -3,18 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Modelo;
+package model;
 
 /**
  *
- * @author Usuario
+ * @author Rayforth
  */
-public class Sobre {
+public class ManejoCorreo {
 
-    private int peso;
-
+    public ManejoCorreo() {
+        
+    }
     
-    
-    
-    
+    public boolean enviarCorreo(){ 
+        return false;
+    }
 }
