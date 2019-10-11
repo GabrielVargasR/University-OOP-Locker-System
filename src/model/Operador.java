@@ -3,19 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Modelo;
+package model;
 
 /**
  *
  * @author Rayforth
  */
-public class ManejoCorreo {
+public class Operador {
 
-    public ManejoCorreo() {
+    public Operador() {
         
     }
     
-    public boolean enviarCorreo(){ 
-        return false;
+    public void enviarCorreo(){
+        
+    }
+    public void tomarDatosClientes(){
+        
     }
 }

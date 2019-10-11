@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Modelo;
+package model;
 
 /**
  *
- * @author Rayforth
+ * @author Usuario
  */
-public enum TTemaRevista {
+public enum TContenidoSobre {
     
-    Negocios, Moda, Tecnologia, Salud, Cocina
+    Documento, ArticuloPequeño
     
 }

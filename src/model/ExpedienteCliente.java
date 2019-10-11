@@ -1,6 +1,6 @@
 
 
-package Modelo;
+package model;
 
 import java.util.ArrayList;
 
@@ -16,8 +16,8 @@ public class ExpedienteCliente {
         this.clientes = clientes;
     }
     
-    public void setClientes(ArrayList<Cliente> clientes) {
-        this.clientes = clientes;
+    public void addCliente(Cliente pCliente) {
+        this.clientes.add(pCliente);
     }
     
     public ArrayList<Cliente> getClientes() {

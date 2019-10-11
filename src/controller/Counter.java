@@ -1,7 +1,9 @@
 
-package Modelo;
+package controller;
 
 import java.util.ArrayList;
+
+import model.*;
 
 /**
  *
@@ -47,14 +49,14 @@ public class Counter {
        
         for (int i = 0; i < clientes.size(); i++) {
             Casillero get = casilleros.get(i);
-            if (get.equals(pCliente))
+            if (get.equals(pCliente)) {
                     return false;
+            }
         }
         
-        clientes.setClientes(pCliente);
+        this.clientes.addCliente(pCliente);
         return true;
-        
-        }
+    }
         
     
    

@@ -1,5 +1,5 @@
 
-package Modelo;
+package model;
 
 import java.util.ArrayList;
 
@@ -32,5 +32,28 @@ public class Casillero {
     public void setContenidos(ArrayList<Articulo> contenidos) {
         this.contenidos = contenidos;
     }
-    
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Casillero other = (Casillero) obj;
+        if (this.numero != other.numero) {
+            return false;
+        }
+        return true;
+    }
 }
