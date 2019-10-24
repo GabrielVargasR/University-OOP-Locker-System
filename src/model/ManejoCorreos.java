@@ -32,6 +32,10 @@ public class ManejoCorreos {
         this.properties.put("mail.smtp.port", "587");
     }
     
+    /**
+     * Función para conseguir instancia de la clase (singleton)
+     * @return instancia única de la clase
+     */
     public static ManejoCorreos getInstance(){
         if (singleton == null){
             singleton = new ManejoCorreos();
@@ -39,7 +43,14 @@ public class ManejoCorreos {
         return singleton;
     }
     
-    public void enviarCorreo(String pDestino, String pSubject, String pTexto){
+    /**
+     * Función para enviar un correo
+     * @param pDestino dirección de correo destino
+     * @param pSubject subject del correo a enviar
+     * @param pTexto texto del correo
+     * @return boolean indicando si se pudo enviar o no el correo
+     */
+    public boolean enviarCorreo(String pDestino, String pSubject, String pTexto){
         
         Session session = Session.getInstance(this.properties,
          new javax.mail.Authenticator() {
@@ -70,6 +81,8 @@ public class ManejoCorreos {
             
         } catch (MessagingException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 }
