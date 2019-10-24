@@ -67,7 +67,6 @@ public class ManejoCorreos {
     }
     
     
-    
    public static void main(String[] args){
        ManejoCorreos a = new ManejoCorreos();
        a.enviarCorreo("josuearrietam99@gmail.com");

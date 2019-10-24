@@ -15,87 +15,89 @@ public class Cliente {
     
     private String cedula;
     private String nombre;
-    private String direccion;
+    private String correo;
     private String telefono;
+    private String direccion;
     private String sexo;
     private Date fechaNacimiento;
     private int numeroCasillero;
     
-    // Falta collection(articulos)
 
-    public Cliente(String cedula, String nombre, String direccion, String telefono, String sexo, Date fechaNacimiento, int numeroCasillero) {
-        this.cedula = cedula;
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.telefono = telefono;
-        this.sexo = sexo;
-        this.fechaNacimiento = fechaNacimiento;
-        this.numeroCasillero = numeroCasillero;
+    public Cliente(String pIdentificador, String pNombre, String pCorreo, String pTelefono, String pDirección, String pSexo, Date pNacimiento) {
+        this.cedula = pIdentificador;
+        this.nombre = pNombre;
+        this.correo = pCorreo;
+        this.telefono = pTelefono;
+        this.direccion = pDirección;
+        this.sexo = pSexo;
+        this.fechaNacimiento = pNacimiento;
     }
 
     public String getCedula() {
-        return cedula;
+        return this.cedula;
+    }
+
+    public void setCedula(String pCedula) {
+        this.cedula = pCedula;
     }
 
     public String getNombre() {
-        return nombre;
+        return this.nombre;
     }
 
-    public String getDireccion() {
-        return direccion;
+    public void setNombre(String pNombre) {
+        this.nombre = pNombre;
+    }
+
+    public String getCorreo() {
+        return this.correo;
+    }
+
+    public void setCorreo(String pCorreo) {
+        this.correo = pCorreo;
     }
 
     public String getTelefono() {
-        return telefono;
+        return this.telefono;
+    }
+
+    public void setTelefono(String pTelefono) {
+        this.telefono = pTelefono;
+    }
+
+    public String getDireccion() {
+        return this.direccion;
+    }
+
+    public void setDireccion(String pDireccion) {
+        this.direccion = pDireccion;
     }
 
     public String getSexo() {
-        return sexo;
+        return this.sexo;
+    }
+
+    public void setSexo(String pSexo) {
+        this.sexo = pSexo;
     }
 
     public Date getFechaNacimiento() {
-        return fechaNacimiento;
+        return this.fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(Date pFechaNacimiento) {
+        this.fechaNacimiento = pFechaNacimiento;
     }
 
     public int getNumeroCasillero() {
-        return numeroCasillero;
+        return this.numeroCasillero;
     }
 
-    public void setCedula(String cedula) {
-        this.cedula = cedula;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public void setSexo(String sexo) {
-        this.sexo = sexo;
-    }
-
-    public void setFechaNacimiento(Date fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
-    }
-
-    public void setNumeroCasillero(int numeroCasillero) {
-        this.numeroCasillero = numeroCasillero;
+    public void setNumeroCasillero(int pNumeroCasillero) {
+        this.numeroCasillero = pNumeroCasillero;
     }
     
-    public boolean agregarCarrito(){
-        return false;
-    }
+    
 
-    @Override
-    public String toString() {
-        return "Cliente{" + "cedula=" + cedula + ", nombre=" + nombre + ", direccion=" + direccion + ", telefono=" + telefono + ", sexo=" + sexo + ", fechaNacimiento=" + fechaNacimiento + ", numeroCasillero=" + numeroCasillero + '}';
-    }
     
 }

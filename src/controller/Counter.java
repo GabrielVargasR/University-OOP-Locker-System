@@ -2,61 +2,60 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import model.*;
 
 /**
  *
- * @author Usuario
+ * @author gabriel
  */
 public class Counter {
-
+    
+    private String nombre;
+    private String cedulaJuridica;
+    private String direccion;
     private ArrayList<Casillero> casilleros;
-    private ArrayList<Articulo> historialVendidos;
-    private ExpedienteCliente clientes;
-
-    public Counter(ArrayList<Casillero> casilleros, ArrayList<Articulo> historialVendidos, ExpedienteCliente clientes) {
-        this.casilleros = casilleros;
-        this.historialVendidos = historialVendidos;
-        this.clientes = clientes;
-    }
-
-    public ArrayList<Casillero> getCasilleros() {
-        return casilleros;
-    }
-
-    public void setCasilleros(ArrayList<Casillero> casilleros) {
-        this.casilleros = casilleros;
-    }
-
-    public ArrayList<Articulo> getHistorialVendidos() {
-        return historialVendidos;
-    }
-
-    public void setHistorialVendidos(ArrayList<Articulo> historialVendidos) {
-        this.historialVendidos = historialVendidos;
-    }
-
-    public ExpedienteCliente getClientes() {
-        return clientes;
-    }
-
-    public void setClientes(ExpedienteCliente clientes) {
-        this.clientes = clientes;
+    private HashMap<Integer, Integer> llaves;
+    private HashMap<String, Cliente> expedienteClientes;
+    
+    public Counter(String pNombre, String pCedula, String pDireccion, int pCantidadCasilleros){
+        this.nombre = pNombre;
+        this.cedulaJuridica = pCedula;
+        this.direccion = pDireccion;
+        int contador = 1000;
+        for (int i = 0; i < pCantidadCasilleros; i++){
+            this.casilleros.add(new Casillero());
+            llaves.put(contador, i);
+            contador++;
+        }
     }
     
     public boolean registrarCliente(Cliente pCliente){
-       
-        for (int i = 0; i < clientes.size(); i++) {
-            Casillero get = casilleros.get(i);
-            if (get.equals(pCliente)) {
-                    return false;
-            }
+        if (!this.expedienteClientes.containsKey(pCliente.getCedula())){
         }
-        
-        this.clientes.addCliente(pCliente);
-        return true;
+        return false;
     }
+
+
+    
+//    /**
+//     * Función para registrar un cliente al counter
+//     * @param pCliente cliente que se va a registrar
+//     * @return boolean que indica si se agregó o no el cliente
+//     */
+//    public boolean registrarCliente(Cliente pCliente){
+//       
+//        for (int i = 0; i < clientes.size(); i++) {
+//            Casillero get = casilleros.get(i);
+//            if (get.equals(pCliente)) {
+//                    return false;
+//            }
+//        }
+//        
+//        this.clientes.addCliente(pCliente);
+//        return true;
+//    }
         
     
    

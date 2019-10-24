@@ -11,6 +11,8 @@ public class Casillero {
     
     private int numero;
     private ArrayList<Articulo> contenidos;
+    
+    public Casillero(){}
 
     public Casillero(int numero, ArrayList<Articulo> contenidos) {
         this.numero = numero;
