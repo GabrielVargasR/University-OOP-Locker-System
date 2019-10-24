@@ -34,4 +34,8 @@ public class CounterManager {
         return false;
     }
     
+    public boolean enviarArticulo(){
+        return false;
+    }
+    
 }

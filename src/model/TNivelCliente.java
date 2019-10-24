@@ -7,6 +7,6 @@ package model;
  */
 public enum TNivelCliente {
 
-    Normal, Plata, Hora 
+    Normal, Plata, Oro 
     
 }

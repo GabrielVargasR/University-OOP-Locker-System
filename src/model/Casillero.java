@@ -9,53 +9,50 @@ import java.util.ArrayList;
  */
 public class Casillero {
     
+    private boolean ocupado;
     private int numero;
     private ArrayList<Articulo> contenidos;
     
-    public Casillero(){}
-
-    public Casillero(int numero, ArrayList<Articulo> contenidos) {
-        this.numero = numero;
-        this.contenidos = contenidos;
-    }
-
-    public int getNumero() {
-        return numero;
-    }
-
-    public void setNumero(int numero) {
-        this.numero = numero;
-    }
-
-    public ArrayList<Articulo> getContenidos() {
-        return contenidos;
+    
+    public Casillero(int pNumero){
+        this.ocupado = false;
+        this.numero = pNumero;
+        this.contenidos = new ArrayList<Articulo>();
     }
     
-    public void setContenidos(ArrayList<Articulo> contenidos) {
-        this.contenidos = contenidos;
+    public boolean isOcupado(){
+        return this.ocupado;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        return hash;
+    
+    public void ocupar(){
+        this.ocupado = true;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    
+    public void desocupar(){
+        this.ocupado = false;
+    }
+    
+    public int getNumero(){
+        return this.numero;
+    }
+    
+    public ArrayList<Articulo> getArticulos(){
+        return this.contenidos;
+    }
+    
+    public boolean agregarArticulo(Articulo pArticulo){
+        if (this.contenidos.add(pArticulo)){
             return true;
         }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Casillero other = (Casillero) obj;
-        if (this.numero != other.numero) {
-            return false;
-        }
-        return true;
+        return false;
     }
+    
+    public boolean retirarArticulo(Articulo pArticulo){
+        if (this.contenidos.remove(pArticulo)){
+            return true;
+        }
+        return false;
+    }
+
+  
 }

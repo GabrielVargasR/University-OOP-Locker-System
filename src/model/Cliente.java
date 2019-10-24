@@ -1,15 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
 import java.util.Date;
+import model.TNivelCliente;
 
 /**
  *
- * @author Usuario
+ * @author gabriel
  */
 public class Cliente {
     
@@ -21,6 +17,8 @@ public class Cliente {
     private String sexo;
     private Date fechaNacimiento;
     private int numeroCasillero;
+    private TNivelCliente nivel;
+    private int paquetesRecibidos;
     
 
     public Cliente(String pCedula, String pNombre, String pCorreo, String pTelefono, String pDirección, String pSexo, Date pNacimiento) {
@@ -31,62 +29,66 @@ public class Cliente {
         this.direccion = pDirección;
         this.sexo = pSexo;
         this.fechaNacimiento = pNacimiento;
+        this.nivel = TNivelCliente.Normal;
+        this.paquetesRecibidos = 0;
     }
 
     public String getCedula() {
         return this.cedula;
     }
-
-    public void setCedula(String pCedula) {
+    
+    public void setCedula(String pCedula){
         this.cedula = pCedula;
     }
 
     public String getNombre() {
         return this.nombre;
     }
-
-    public void setNombre(String pNombre) {
+    
+    public void setNombre(String pNombre){
         this.nombre = pNombre;
     }
 
     public String getCorreo() {
         return this.correo;
     }
-
-    public void setCorreo(String pCorreo) {
+    
+    public void setCorreo(String pCorreo){
         this.correo = pCorreo;
     }
 
     public String getTelefono() {
         return this.telefono;
     }
-
-    public void setTelefono(String pTelefono) {
+    
+    public void setTelefono(String pTelefono){
         this.telefono = pTelefono;
     }
 
     public String getDireccion() {
         return this.direccion;
     }
-
-    public void setDireccion(String pDireccion) {
+    
+    public void setDireccion(String pDireccion){
         this.direccion = pDireccion;
     }
 
     public String getSexo() {
         return this.sexo;
     }
-
-    public void setSexo(String pSexo) {
+    
+    public void setSexo(String pSexo){
         this.sexo = pSexo;
     }
 
     public Date getFechaNacimiento() {
         return this.fechaNacimiento;
     }
-
-    public void setFechaNacimiento(Date pFechaNacimiento) {
-        this.fechaNacimiento = pFechaNacimiento;
+    
+    public void setFechaNacimiento(int pDia, int pMes, int pAnno){
+        this.fechaNacimiento.setDate(pDia);
+        this.fechaNacimiento.setMonth(pMes);
+        this.fechaNacimiento.setYear(pAnno);
     }
 
     public int getNumeroCasillero() {
@@ -97,7 +99,16 @@ public class Cliente {
         this.numeroCasillero = pNumeroCasillero;
     }
     
+    public TNivelCliente getNivel(){
+        return this.nivel;
+    }
     
-
-    
+    public void incPaquetesRecibidos(){
+        this.paquetesRecibidos++;
+        if (this.paquetesRecibidos > 10 && this.nivel != TNivelCliente.Plata){
+                this.nivel = TNivelCliente.Plata;
+        } else if (this.paquetesRecibidos > 20 && this.nivel != TNivelCliente.Oro){
+            this.nivel = TNivelCliente.Oro;
+        }
+    }
 }
