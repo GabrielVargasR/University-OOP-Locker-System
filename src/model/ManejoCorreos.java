@@ -20,7 +20,7 @@ public class ManejoCorreos {
     
     public ManejoCorreos(){}
     
-    public void enviarCorreo(String pDestino){
+    public void enviarCorreo(String pDestino, String pTexto){
         
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
@@ -47,15 +47,13 @@ public class ManejoCorreos {
 	
             // Agrega Destinatario
 	    message.setRecipient(Message.RecipientType.TO, new InternetAddress(pDestino));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress("Rayforth1616@gmail.com"));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress("gabriel.vargasr99@gmail.com"));
             
 	
 	    // Subject del correo
-	    message.setSubject("Prueba Java");
+	    message.setSubject("Artículos pendientes");
 	
 	    // Contenido del correo
-	    message.setText("Email de prueba enviado desde java");
+	    message.setText(pTexto);
             
             // Envia correo
 	    Transport.send(message);
@@ -65,11 +63,4 @@ public class ManejoCorreos {
             e.printStackTrace();
         }
     }
-    
-    
-    
-   public static void main(String[] args){
-       ManejoCorreos a = new ManejoCorreos();
-       a.enviarCorreo("josuearrietam99@gmail.com");
-   }
 }

@@ -4,59 +4,39 @@ import java.util.UUID;
 
 /**
  *
- * @author Usuario
+ * @author gabriel
  */
 public class Articulo {
 
     protected UUID id;
-    protected boolean estado;
-    protected String descripciones;
+    protected boolean entregado; // retirado o no
+    protected String descripcion;
     protected Cliente remitente;
 
-    public Articulo(UUID id, boolean estado, String descripciones, Cliente remitente) {
-        this.id = id;
-        this.estado = estado;
-        this.descripciones = descripciones;
-        this.remitente = remitente;
+    public Articulo(String pDescripcion, Cliente pCliente) {
+        this.id = UUID.randomUUID();
+        this.entregado = false;
+        this.descripcion = pDescripcion;
+        this.remitente = pCliente;
     }
 
     public UUID getId() {
-        return id;
+        return this.id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public boolean getEstado() {
+        return this.entregado;
     }
 
-    public boolean isEstado() {
-        return estado;
+    public void entregado() {
+        this.entregado = true;
     }
 
-    public void setEstado(boolean estado) {
-        this.estado = estado;
-    }
-
-    public String getDescripciones() {
-        return descripciones;
-    }
-
-    public void setDescripciones(String descripciones) {
-        this.descripciones = descripciones;
-    }
-
-    public Cliente getRemitente() {
-        return remitente;
-    }
-
-    public void setRemitente(Cliente remitente) {
-        this.remitente = remitente;
-    }
-
-    @Override
-    public String toString() {
-        return "Articulo{" + "id=" + id + ", estado=" + estado + ", descripciones=" + descripciones + ", remitente=" + remitente + '}';
+    public String getDescripcion() {
+        return descripcion;
     }
     
-    
-    
+    public Cliente getRemitente(){
+        return this.remitente;
+    }
 }

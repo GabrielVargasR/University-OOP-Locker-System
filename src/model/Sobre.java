@@ -1,20 +1,36 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
+
+import model.TTipoSobre;
+import model.TContenidoSobre;
+
 
 /**
  *
- * @author Usuario
+ * @author gabriel
  */
-public class Sobre {
+public class Sobre extends Articulo {
 
-    private int peso;
+    private double peso;
+    private TTipoSobre tipo;
+    private TContenidoSobre contenido;
+    
 
+    public Sobre(String pDescripcion, Cliente pCliente, double pPeso, TTipoSobre pTipo, TContenidoSobre pContenido){
+        super(pDescripcion, pCliente);
+        this.peso = pPeso;
+        this.tipo = pTipo;
+        this.contenido = pContenido;
+    }
     
+    public double getPeso(){
+        return this.peso;
+    }
     
+    public TTipoSobre getTipo(){
+        return this.tipo;
+    }
     
-    
+    public TContenidoSobre getContenido(){
+        return this.contenido;
+    }
 }
