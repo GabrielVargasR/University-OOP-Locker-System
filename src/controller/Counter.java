@@ -36,8 +36,9 @@ public class Counter {
             contador++;
         }
     }
-    
-    // ****************************** Administración de Clientes *****************************************
+    /* ***************************************************************************************************
+       ********************************** Administración de Clientes *************************************
+       *************************************************************************************************** */
     
     /**
      * Función para registrar un cliente al counter
@@ -51,14 +52,29 @@ public class Counter {
                 if (!casillero.isOcupado()){
                     pCliente.setNumeroCasillero(casillero.getNumero());
                     casillero.ocupar();
-                    break;
+                    break;  
                 }
             }
+            return true;
         }
         return false;
     }
     
-    public void modificarCliente(String pCedula, String pNombre, String pCorreo, String pTelefono, String pDireccion, String pSexo, int diaN, int mesN, int annoN){
+    /**
+     * Función para modificar a un cliente especificado
+     * Recoge todos los campos de entrada de la info del cliente
+     * @param pCedula cédula del cliente a modificar
+     * @param pNombre nombre del cliente
+     * @param pCorreo correo del cliente
+     * @param pTelefono número de teléfono del cliente
+     * @param pDireccion dirección del cliente
+     * @param pSexo sexo del cliente
+     * @param pDiaN día de nacimiento del cliente
+     * @param pMesN mes de nacimiento del cliente
+     * @param pAnnoN año de nacimiento del cliente
+     * @return boolean para señalar si se pudo modificar el cliente o no
+     */
+    public boolean modificarCliente(String pCedula, String pNombre, String pCorreo, String pTelefono, String pDireccion, String pSexo, int pDiaN, int pMesN, int pAnnoN){
         if (this.expedienteClientes.containsKey(pCedula)){
             Cliente cliente = this.expedienteClientes.get(pCedula);
             cliente.setNombre(pNombre);
@@ -66,11 +82,64 @@ public class Counter {
             cliente.setTelefono(pTelefono);
             cliente.setDireccion(pDireccion);
             cliente.setSexo(pSexo);
-            cliente.setFechaNacimiento(diaN, mesN, annoN);
+            cliente.setFechaNacimiento(pDiaN, pMesN, pAnnoN);
+            return true;
         }
+        return false;
     }
     
-    // ****************************** Administración de Articulos *****************************************
+    /**
+     * Función para consultar un cliente del expediente
+     * @param pCedula número de cédula del cliente a consultar
+     * @return String con la información del cliente o un mensaje indicando que no se encontró el cliente
+     */
+    public String consultarCliente(String pCedula){
+        if (this.expedienteClientes.containsKey(pCedula)){
+            String str = this.expedienteClientes.get(pCedula).toString();
+            str += "Artículos pendientes:\n";
+            
+            int numCasillero = this.expedienteClientes.get(pCedula).getNumeroCasillero();
+            int llave = this.llaves.get(numCasillero);
+            
+            for (Articulo art : casilleros.get(llave).getArticulos()){
+                str += "- " + art.getDescripcion() + " ID: " + art.getId().toString() + "\n";
+            }
+            
+            return str;
+        }
+        return "No se encontró el cliente ingresado";
+    }
+    
+    /**
+     * Función para eliminar un cliente del expediente
+     * Limpia el casillero del cliente, lo marca como desocupado y saca al cliente del expediente
+     * @param pCedula núemro de cédula del cliente a eliminar
+     * @return boolean indicando si se pudo eliminar el cliente
+     */
+    public boolean eliminarCliente(String pCedula){
+        if (this.expedienteClientes.containsKey(pCedula)){
+            Cliente cliente = this.expedienteClientes.get(pCedula);
+            int llave = this.llaves.get(cliente.getNumeroCasillero());
+            Casillero casillero = this.casilleros.get(llave);
+            
+            casillero.desocupar(); // marca el casillero como desocupado
+            casillero.getArticulos().clear(); // libera el casillero
+            this.expedienteClientes.remove(pCedula, cliente); // elimina cliente del expediente
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Función para desplegar la información de todos los clientes en el expediente
+    */
+    public String consultarClientes(){
+        return "";
+    }
+    
+    /* ***************************************************************************************************
+       ********************************** Administración de Artículos ************************************
+       *************************************************************************************************** */
     
     /**
      * Función para obtener los artículos pendientes de un cliente
