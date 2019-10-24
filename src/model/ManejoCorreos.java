@@ -17,24 +17,34 @@ import javax.mail.Transport;
  * @author gabriel
  */
 public class ManejoCorreos {
+    private static ManejoCorreos singleton;
+    private String correo;
+    private String password;
+    private Properties properties;
     
-    public ManejoCorreos(){}
+    private ManejoCorreos(){
+        this.correo = "prograpoo123@gmail.com";
+        this.password = "lalairai_lalairala";
+        this.properties =  new Properties();
+        this.properties.put("mail.smtp.auth", "true");
+        this.properties.put("mail.smtp.starttls.enable", "true");
+        this.properties.put("mail.smtp.host", "smtp.gmail.com");
+        this.properties.put("mail.smtp.port", "587");
+    }
     
-    public void enviarCorreo(String pDestino, String pTexto){
+    public static ManejoCorreos getInstance(){
+        if (singleton == null){
+            singleton = new ManejoCorreos();
+        }
+        return singleton;
+    }
+    
+    public void enviarCorreo(String pDestino, String pSubject, String pTexto){
         
-        Properties properties = new Properties();
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.port", "587");
-
-        String emailAddress = "prograpoo123@gmail.com";
-        String password = "lalairai_lalairala";
-        
-        Session session = Session.getInstance(properties,
+        Session session = Session.getInstance(this.properties,
          new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-               return new PasswordAuthentication(emailAddress, password);
+               return new PasswordAuthentication(correo, password);
 	   }
          });
          
@@ -43,14 +53,13 @@ public class ManejoCorreos {
             MimeMessage message = new MimeMessage(session);
 	
             // Agrega fuente
-	    message.setFrom(new InternetAddress(emailAddress));
+	    message.setFrom(new InternetAddress(correo));
 	
             // Agrega Destinatario
 	    message.setRecipient(Message.RecipientType.TO, new InternetAddress(pDestino));
-            
 	
 	    // Subject del correo
-	    message.setSubject("Artículos pendientes");
+	    message.setSubject(pSubject);
 	
 	    // Contenido del correo
 	    message.setText(pTexto);
