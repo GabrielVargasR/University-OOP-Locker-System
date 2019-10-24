@@ -19,6 +19,12 @@ public class Counter {
     private HashMap<Integer, Integer> llaves;
     private HashMap<String, Cliente> expedienteClientes;
     
+    /**
+     * Constructor de la clase counter
+     * @param pNombre nombre del counter
+     * @param pCedula cédula jurídica
+     * @param pCantidadCasilleros número de casilleros que va a tener el counter
+     */
     public Counter(String pNombre, String pCedula, String pDireccion, int pCantidadCasilleros){
         this.nombre = pNombre;
         this.cedulaJuridica = pCedula;
@@ -31,32 +37,16 @@ public class Counter {
         }
     }
     
+    /**
+     * Función para registrar un cliente al counter
+     * @param pCliente cliente que se va a registrar
+     * @return boolean que indica si se agregó o no el cliente
+     */
     public boolean registrarCliente(Cliente pCliente){
         if (!this.expedienteClientes.containsKey(pCliente.getCedula())){
+            expedienteClientes.put(pCliente.getCedula(), pCliente);
+            for (Casillero)
         }
         return false;
     }
-
-
-    
-//    /**
-//     * Función para registrar un cliente al counter
-//     * @param pCliente cliente que se va a registrar
-//     * @return boolean que indica si se agregó o no el cliente
-//     */
-//    public boolean registrarCliente(Cliente pCliente){
-//       
-//        for (int i = 0; i < clientes.size(); i++) {
-//            Casillero get = casilleros.get(i);
-//            if (get.equals(pCliente)) {
-//                    return false;
-//            }
-//        }
-//        
-//        this.clientes.addCliente(pCliente);
-//        return true;
-//    }
-        
-    
-   
 }

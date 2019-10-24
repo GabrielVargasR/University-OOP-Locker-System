@@ -23,8 +23,8 @@ public class Cliente {
     private int numeroCasillero;
     
 
-    public Cliente(String pIdentificador, String pNombre, String pCorreo, String pTelefono, String pDirección, String pSexo, Date pNacimiento) {
-        this.cedula = pIdentificador;
+    public Cliente(String pCedula, String pNombre, String pCorreo, String pTelefono, String pDirección, String pSexo, Date pNacimiento) {
+        this.cedula = pCedula;
         this.nombre = pNombre;
         this.correo = pCorreo;
         this.telefono = pTelefono;
