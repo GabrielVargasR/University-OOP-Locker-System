@@ -15,6 +15,10 @@ public class Revista extends Articulo{
         this.nombre = pNombre;
         this.catalogo = pCatalogo;
         this.tema = pTema;
+        
+        if (!this.catalogo){
+            super.impuesto = 1;
+        }
     }
 
     public String getNombre() {

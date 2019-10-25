@@ -3,6 +3,7 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import model.*;
 
@@ -18,21 +19,30 @@ public class Counter {
     private ArrayList<Casillero> casilleros;
     private HashMap<Integer, Integer> llaves; // número de casillero -> número en ArrayList de casilleros
     private HashMap<String, Cliente> expedienteClientes;
+    private ArrayList<Articulo> recibidos;
+    private ArrayList<Articulo> retirados;
     
     /**
      * Constructor de la clase counter
      * @param pNombre nombre del counter
      * @param pCedula cédula jurídica
+     * @param pDireccion dirección del counter
      * @param pCantidadCasilleros número de casilleros que va a tener el counter
      */
     public Counter(String pNombre, String pCedula, String pDireccion, int pCantidadCasilleros){
         this.nombre = pNombre;
         this.cedulaJuridica = pCedula;
         this.direccion = pDireccion;
+        this.casilleros = new ArrayList<Casillero>();
+        this.llaves = new HashMap<Integer, Integer>();
+        this.expedienteClientes = new HashMap<String, Cliente>();
+        this.recibidos = new ArrayList<Articulo>();
+        this.retirados = new ArrayList<Articulo>();
+        
         int contador = 1000;
         for (int i = 0; i < pCantidadCasilleros; i++){
             this.casilleros.add(new Casillero(contador));
-            llaves.put(contador, i);
+            this.llaves.put(contador, i);
             contador++;
         }
     }
@@ -104,7 +114,6 @@ public class Counter {
             for (Articulo art : casilleros.get(llave).getArticulos()){
                 str += "- " + art.getDescripcion() + " ID: " + art.getId().toString() + "\n";
             }
-            
             return str;
         }
         return "No se encontró el cliente ingresado";
@@ -146,7 +155,7 @@ public class Counter {
      * @param pCedula cédula del cliente a consultar
      * @return lista de artículos pendientes
      */
-    public ArrayList<Articulo> articulosPendientes(int pCedula){
+    public ArrayList<Articulo> articulosPendientes(String pCedula){
          if (this.expedienteClientes.containsKey(pCedula)){
             int numCasillero = this.expedienteClientes.get(pCedula).getNumeroCasillero();
             int llave = this.llaves.get(numCasillero);
@@ -158,15 +167,14 @@ public class Counter {
     /**
      * Función para enviar un artículo a un cliente existente
      * @param pArticulo articulo a enviar
-     * @param pCedula cédula del cliente que recibe el artículo
      * @return boolean que indica si se envió el artículo con éxito
      */
-    public boolean enviarArticulo(Articulo pArticulo, int pCedula){
-        if (this.expedienteClientes.containsKey(pCedula)){
-            int numCasillero = this.expedienteClientes.get(pCedula).getNumeroCasillero();
-            int llave = this.llaves.get(numCasillero);
+    public boolean enviarArticulo(Articulo pArticulo){
+        if (expedienteClientes.containsValue(pArticulo.getRemitente())){
+            int numeroCasillero = pArticulo.getRemitente().getNumeroCasillero();
+            int llave = this.llaves.get(numeroCasillero);
             this.casilleros.get(llave).agregarArticulo(pArticulo);
-            // enviar correo
+            // enviar correo a cliente
             return true;
         }
         return false;
@@ -180,11 +188,54 @@ public class Counter {
      */
     public boolean retirarArticulos(ArrayList<Articulo> pArticulos, int pCedula){
         if (this.expedienteClientes.containsKey(pCedula)){
-            
+            // marcar como retirado (agrega Date)
+            // agregar a retirados
         }
         return false;
     }
     
+     /* ****************************************************************************************************
+        ********************************** Consultas de Entregables ****************************************
+        **************************************************************************************************** */
+    
+    public boolean consultarEstadoCasillero(String pCedula){
+        if (this.expedienteClientes.containsKey(pCedula)){
+            int numCasillero = this.expedienteClientes.get(pCedula).getNumeroCasillero();
+            int llave = this.llaves.get(numCasillero);
+            if (!this.casilleros.get(llave).getArticulos().isEmpty()){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean consultarEstadoCasillero(int pNumCasillero){
+         if (this.llaves.containsKey(pNumCasillero)){
+            int llave = this.llaves.get(pNumCasillero);
+            if (!this.casilleros.get(llave).getArticulos().isEmpty()){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public String recibidosEnFecha(){
+        String str = "";
+        return str;
+    }
+    
+    public String entregadosEnFecha(){
+        String str = "";
+        return str;
+    }
+    
+     /* ****************************************************************************************************
+        ************************************ Consultas de Divisas ******************************************
+        **************************************************************************************************** */
+    
+    public int compraDivisa(){
+        return 0;
+    }
     
     
     

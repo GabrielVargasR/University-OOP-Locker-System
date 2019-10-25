@@ -12,12 +12,14 @@ public class Articulo {
     protected boolean entregado; // retirado o no
     protected String descripcion;
     protected Cliente remitente;
+    protected double impuesto;
 
     public Articulo(String pDescripcion, Cliente pCliente) {
         this.id = UUID.randomUUID();
         this.entregado = false;
         this.descripcion = pDescripcion;
         this.remitente = pCliente;
+        this.impuesto = 0;
     }
 
     public UUID getId() {
