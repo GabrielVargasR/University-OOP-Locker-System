@@ -11,14 +11,14 @@ public class Articulo {
     protected UUID id;
     protected boolean entregado; // retirado o no
     protected String descripcion;
-    protected Cliente remitente;
+    protected String remitente;
     protected double impuesto;
 
-    public Articulo(String pDescripcion, Cliente pCliente) {
+    public Articulo(String pDescripcion, String pRemitente) {
         this.id = UUID.randomUUID();
         this.entregado = false;
         this.descripcion = pDescripcion;
-        this.remitente = pCliente;
+        this.remitente = pRemitente;
         this.impuesto = 0;
     }
 
@@ -38,7 +38,7 @@ public class Articulo {
         return descripcion;
     }
     
-    public Cliente getRemitente(){
+    public String getRemitente(){
         return this.remitente;
     }
     

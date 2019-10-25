@@ -10,8 +10,8 @@ public class Paquete extends Articulo{
     private boolean fragil;
     private double peso;
 
-    public Paquete(String pDescripcion, Cliente pCliente, boolean pElectronico, boolean pFragil, double pPeso) {
-        super(pDescripcion, pCliente);
+    public Paquete(String pDescripcion, String pRemitente, boolean pElectronico, boolean pFragil, double pPeso) {
+        super(pDescripcion, pRemitente);
         this.electronico = pElectronico;
         this.fragil = pFragil;
         this.peso = pPeso;

@@ -53,6 +53,22 @@ public class Casillero {
         }
         return false;
     }
+    
+    public boolean isEmpty(){
+        return this.contenidos.isEmpty();
+    }
+    
+    @Override
+    public String toString(){
+        if (!this.contenidos.isEmpty()){
+            String str = "";
+            for (Articulo art : this.contenidos){
+                str += "- " + art.getDescripcion() + " ID: " + art.getId().toString() + "\n";
+            }
+            return str;
+        }
+        return "Casillero vacío, no hay artículos pendientes";
+    }
 
   
 }

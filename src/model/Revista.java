@@ -10,8 +10,8 @@ public class Revista extends Articulo{
     private boolean catalogo;
     private TTemaRevista tema;
 
-    public Revista(String pDescripcion, Cliente pCliente, String pNombre, boolean pCatalogo, TTemaRevista pTema) {
-        super(pDescripcion, pCliente);
+    public Revista(String pDescripcion, String pRemitente, String pNombre, boolean pCatalogo, TTemaRevista pTema) {
+        super(pDescripcion, pRemitente);
         this.nombre = pNombre;
         this.catalogo = pCatalogo;
         this.tema = pTema;

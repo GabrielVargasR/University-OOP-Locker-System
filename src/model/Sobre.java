@@ -15,8 +15,8 @@ public class Sobre extends Articulo {
     private TContenidoSobre contenido;
     
 
-    public Sobre(String pDescripcion, Cliente pCliente, double pPeso, TTipoSobre pTipo, TContenidoSobre pContenido){
-        super(pDescripcion, pCliente);
+    public Sobre(String pDescripcion, String pRemitente, double pPeso, TTipoSobre pTipo, TContenidoSobre pContenido){
+        super(pDescripcion, pRemitente);
         this.peso = pPeso;
         this.tipo = pTipo;
         this.contenido = pContenido;

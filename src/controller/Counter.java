@@ -1,26 +1,32 @@
-
 package controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Date;
+import model.Cliente;
+import model.Articulo;
+import model.Paquete;
+import model.Revista;
+import model.Sobre;
+import model.GestorCasilleros;
+import model.GestorClientes;
+import model.ManejoCorreos;
+import model.BCCRClient;
 
-import model.*;
+import java.util.ArrayList;
+import model.TContenidoSobre;
+import model.TTemaRevista;
+import model.TTipoSobre;
 
 /**
  *
  * @author gabriel
  */
 public class Counter {
-    
     private String nombre;
     private String cedulaJuridica;
     private String direccion;
-    private ArrayList<Casillero> casilleros;
-    private HashMap<Integer, Integer> llaves; // número de casillero -> número en ArrayList de casilleros
-    private HashMap<String, Cliente> expedienteClientes;
-    private ArrayList<Articulo> recibidos;
-    private ArrayList<Articulo> retirados;
+    private GestorClientes gestorClientes;
+    private GestorCasilleros gestorCasilleros;
+    private ManejoCorreos correos;
+    private BCCRClient webBanco;
     
     /**
      * Constructor de la clase counter
@@ -33,117 +39,91 @@ public class Counter {
         this.nombre = pNombre;
         this.cedulaJuridica = pCedula;
         this.direccion = pDireccion;
-        this.casilleros = new ArrayList<Casillero>();
-        this.llaves = new HashMap<Integer, Integer>();
-        this.expedienteClientes = new HashMap<String, Cliente>();
-        this.recibidos = new ArrayList<Articulo>();
-        this.retirados = new ArrayList<Articulo>();
-        
-        int contador = 1000;
-        for (int i = 0; i < pCantidadCasilleros; i++){
-            this.casilleros.add(new Casillero(contador));
-            this.llaves.put(contador, i);
-            contador++;
-        }
+        this.gestorClientes = new GestorClientes();
+        this.gestorCasilleros = new GestorCasilleros(pCantidadCasilleros);
+        this.correos = ManejoCorreos.getInstance();
+        this.webBanco = BCCRClient.getInstance();
     }
+    
     /* ***************************************************************************************************
        ********************************** Administración de Clientes *************************************
        *************************************************************************************************** */
     
     /**
-     * Función para registrar un cliente al counter
-     * @param pCliente cliente que se va a registrar
-     * @return boolean que indica si se agregó o no el cliente
-     */
-    public boolean registrarCliente(Cliente pCliente){
-        if (!this.expedienteClientes.containsKey(pCliente.getCedula())){
-            expedienteClientes.put(pCliente.getCedula(), pCliente);
-            for (Casillero casillero : this.casilleros){
-                if (!casillero.isOcupado()){
-                    pCliente.setNumeroCasillero(casillero.getNumero());
-                    casillero.ocupar();
-                    break;  
-                }
-            }
-            return true;
-        }
-        return false;
-    }
-    
-    /**
-     * Función para modificar a un cliente especificado
-     * Recoge todos los campos de entrada de la info del cliente
+     * Función para registrar un cliente al counter. Recibe info de la gui y lo pasa al gestor de clientes
+     * Asigna casillero al cliente
      * @param pCedula cédula del cliente a modificar
      * @param pNombre nombre del cliente
      * @param pCorreo correo del cliente
      * @param pTelefono número de teléfono del cliente
      * @param pDireccion dirección del cliente
      * @param pSexo sexo del cliente
-     * @param pDiaN día de nacimiento del cliente
-     * @param pMesN mes de nacimiento del cliente
-     * @param pAnnoN año de nacimiento del cliente
-     * @return boolean para señalar si se pudo modificar el cliente o no
+     * @param pDia día de nacimiento del cliente
+     * @param pMes mes de nacimiento del cliente
+     * @param pAnno año de nacimiento del cliente
+     * @return número de casillero asignado. Si no se logra ingresar, retorna un 0
      */
-    public boolean modificarCliente(String pCedula, String pNombre, String pCorreo, String pTelefono, String pDireccion, String pSexo, int pDiaN, int pMesN, int pAnnoN){
-        if (this.expedienteClientes.containsKey(pCedula)){
-            Cliente cliente = this.expedienteClientes.get(pCedula);
-            cliente.setNombre(pNombre);
-            cliente.setCorreo(pCorreo);
-            cliente.setTelefono(pTelefono);
-            cliente.setDireccion(pDireccion);
-            cliente.setSexo(pSexo);
-            cliente.setFechaNacimiento(pDiaN, pMesN, pAnnoN);
-            return true;
+    public int registrarCliente(String pCedula, String pNombre, String pCorreo, String pTelefono, String pDireccion, String pSexo, int pDia, int pMes, int pAnno){
+        if (this.gestorClientes.registrarCliente(pCedula, pNombre, pCorreo, pTelefono, pDireccion, pSexo, pDia, pMes, pAnno)){
+            return this.gestorCasilleros.asignarCasillero(this.gestorClientes.getCliente(pCedula));
         }
-        return false;
+        return 0;
     }
     
     /**
-     * Función para consultar un cliente del expediente
+     * Función para modificar los datos de un cliente al counter. Recibe info de la gui y lo pasa al gestor de clientes
+     * @param pCedula cédula del cliente a modificar
+     * @param pNombre nombre del cliente
+     * @param pCorreo correo del cliente
+     * @param pTelefono número de teléfono del cliente
+     * @param pDireccion dirección del cliente
+     * @param pSexo sexo del cliente
+     * @param pDia día de nacimiento del cliente
+     * @param pMes mes de nacimiento del cliente
+     * @param pAnno año de nacimiento del cliente
+     * @return número de casillero del cliente. Si no logra modificar, retorna un 0
+     */
+    public int modificarCliente(String pCedula, String pNombre, String pCorreo, String pTelefono, String pDireccion, String pSexo, int pDia, int pMes, int pAnno){
+        if (this.gestorClientes.existeCliente(pCedula)){
+            return this.gestorClientes.modificarCliente(pCedula, pNombre, pCorreo, pTelefono, pDireccion, pSexo, pDia, pMes, pAnno);
+        }
+        return 0;
+    }
+    
+    /**
+     * Función para consultar la información de un cliente
      * @param pCedula número de cédula del cliente a consultar
-     * @return String con la información del cliente o un mensaje indicando que no se encontró el cliente
+     * @return String con la información del cliente
      */
     public String consultarCliente(String pCedula){
-        if (this.expedienteClientes.containsKey(pCedula)){
-            String str = this.expedienteClientes.get(pCedula).toString();
+        if (this.gestorClientes.existeCliente(pCedula)){
+            String str = this.gestorClientes.getCliente(pCedula).toString();
             str += "Artículos pendientes:\n";
-            
-            int numCasillero = this.expedienteClientes.get(pCedula).getNumeroCasillero();
-            int llave = this.llaves.get(numCasillero);
-            
-            for (Articulo art : casilleros.get(llave).getArticulos()){
-                str += "- " + art.getDescripcion() + " ID: " + art.getId().toString() + "\n";
-            }
+            str += this.gestorCasilleros.getContenidoCasillero(this.gestorClientes.getCliente(pCedula).getNumeroCasillero());
             return str;
         }
-        return "No se encontró el cliente ingresado";
+        return "No existe cliente con esa cédula";
     }
     
     /**
-     * Función para eliminar un cliente del expediente
-     * Limpia el casillero del cliente, lo marca como desocupado y saca al cliente del expediente
-     * @param pCedula núemro de cédula del cliente a eliminar
-     * @return boolean indicando si se pudo eliminar el cliente
+     * Función para eliminar un cliente del sistema. Verifica que el casillero del cliente esté vacío y lo desocupa
+     * @param pCedula número de cédula del cliente a eliminar
+     * @return String con mensaje de éxito o fallo
      */
-    public boolean eliminarCliente(String pCedula){
-        if (this.expedienteClientes.containsKey(pCedula)){
-            Cliente cliente = this.expedienteClientes.get(pCedula);
-            int llave = this.llaves.get(cliente.getNumeroCasillero());
-            Casillero casillero = this.casilleros.get(llave);
-            
-            casillero.desocupar(); // marca el casillero como desocupado
-            casillero.getArticulos().clear(); // libera el casillero
-            this.expedienteClientes.remove(pCedula, cliente); // elimina cliente del expediente
-            return true;
+    public String eliminarCliente(String pCedula){
+        if (this.gestorClientes.existeCliente(pCedula)){
+            int numCasillero = this.gestorClientes.getCliente(pCedula).getNumeroCasillero();
+            if (this.gestorCasilleros.liberarCasillero(numCasillero)){
+                this.gestorClientes.eliminarCliente(pCedula);
+                return "Cliente eliminado con éxito";
+            }
+            return "Para eliminar cliente, debe retirar los artículos pendientes primero";
         }
-        return false;
+        return "No existe cliente con esa cédula";
     }
     
-    /**
-     * Función para desplegar la información de todos los clientes en el expediente
-    */
-    public String consultarClientes(){
-        return "";
+    public ArrayList<Cliente> consultarClientes(){
+        return this.gestorClientes.consultarClientes();
     }
     
     /* ***************************************************************************************************
@@ -151,126 +131,123 @@ public class Counter {
        *************************************************************************************************** */
     
     /**
-     * Función para obtener los artículos pendientes de un cliente
-     * @param pCedula cédula del cliente a consultar
-     * @return lista de artículos pendientes
+     * Función para enviar un artículo de tipo Paquete a un cliente
+     * @param pCedula número de cédula del cliente a quien se desea enviar el artículo
+     * @param pDescripcion descripción del artículo
+     * @param pRemitente nombre de quien envía el paquete
+     * @param pElectronico indica si el contenido del paquete es electrónico
+     * @param pFragil indica si el contenido del paquete es frágil
+     * @param pPeso peso del paquete
+     * @return boolean para indicar si se envió o no el paquete
      */
-    public ArrayList<Articulo> articulosPendientes(String pCedula){
-         if (this.expedienteClientes.containsKey(pCedula)){
-            int numCasillero = this.expedienteClientes.get(pCedula).getNumeroCasillero();
-            int llave = this.llaves.get(numCasillero);
-            return this.casilleros.get(llave).getArticulos();
-        }
-        return null;
-    }
-    
-    /**
-     * Función para enviar un artículo a un cliente existente
-     * @param pArticulo articulo a enviar
-     * @return boolean que indica si se envió el artículo con éxito
-     */
-    public boolean enviarArticulo(Articulo pArticulo){
-        if (expedienteClientes.containsValue(pArticulo.getRemitente())){
-            int numeroCasillero = pArticulo.getRemitente().getNumeroCasillero();
-            int llave = this.llaves.get(numeroCasillero);
-            this.casilleros.get(llave).agregarArticulo(pArticulo);
-            // enviar correo a cliente
+    public boolean enviarArticulo(String pCedula, String pDescripcion, String pRemitente, boolean pElectronico, boolean pFragil, double pPeso){
+        if (this.gestorClientes.existeCliente(pCedula)){
+            int numCasillero = this.gestorClientes.getCliente(pCedula).getNumeroCasillero();
+            Paquete articulo = new Paquete(pDescripcion, pRemitente, pElectronico, pFragil, pPeso);
+            this.gestorCasilleros.recibirPaquete(numCasillero, articulo);
+            String subject = "Paquete recibido";
+            String contenido = "Ha recibido un nuevo paquete en su casillero\n";
+            contenido += articulo.toString() + "\nEnviado por: " + pRemitente;
+            this.correos.enviarCorreo(this.gestorClientes.getCliente(pCedula).getCorreo(), subject, contenido);
             return true;
         }
         return false;
     }
     
     /**
-     * Función para retirar una serie de artículos del casillero del cliente consultado
-     * @param pArticulos lista de artículos a retirar
-     * @param pCedula identificador del cliente
-     * @return
+     * Función para enviar un artículo de tipo Revista a un cliente
+     * @param pCedula número de cédula del cliente a quien se desea enviar el artículo
+     * @param pDescripcion descripción del artículo
+     * @param pRemitente nombre de quien envía el paquete
+     * @param pNombre nombre de la revista
+     * @param pCatalogo boolean para indicar si la revista es parte de un catálogo o no
+     * @param pTema categoría de la revista
+     * @return boolean para indicar si se envió o no el paquete
      */
-    public boolean retirarArticulos(ArrayList<Articulo> pArticulos, int pCedula){
-        if (this.expedienteClientes.containsKey(pCedula)){
-            // marcar como retirado (agrega Date)
-            // agregar a retirados
+    public boolean enviarArticulo(String pCedula, String pDescripcion, String pRemitente, String pNombre, boolean pCatalogo, TTemaRevista pTema){
+        if (this.gestorClientes.existeCliente(pCedula)){
+            int numCasillero = this.gestorClientes.getCliente(pCedula).getNumeroCasillero();
+            Revista articulo = new Revista(pDescripcion, pRemitente, pNombre, pCatalogo, pTema);
+            this.gestorCasilleros.recibirPaquete(numCasillero, articulo);
+            String subject = "Paquete recibido";
+            String contenido = "Ha recibido uns nueva revista en su casillero\n";
+            contenido += articulo.toString() + "\nEnviado por: " + pRemitente;
+            this.correos.enviarCorreo(this.gestorClientes.getCliente(pCedula).getCorreo(), subject, contenido);
+            return true;
         }
         return false;
     }
     
-     /* ****************************************************************************************************
-        ********************************** Consultas de Entregables ****************************************
-        **************************************************************************************************** */
-    
-    public boolean consultarEstadoCasillero(String pCedula){
-        if (this.expedienteClientes.containsKey(pCedula)){
-            int numCasillero = this.expedienteClientes.get(pCedula).getNumeroCasillero();
-            int llave = this.llaves.get(numCasillero);
-            if (!this.casilleros.get(llave).getArticulos().isEmpty()){
-                return true;
-            }
+    /**
+     * Función para enviar un artículo de tipo Sobre a un cliente
+     * @param pCedula número de cédula del cliente a quien se desea enviar el artículo
+     * @param pDescripcion descripción del artículo
+     * @param pRemitente nombre de quien envía el paquete
+     * @param pPeso peso del contenido del sobre
+     * @param pTipo tipo de sobre
+     * @param pContenido contenido del sobre
+     * @return boolean para indicar si se envió o no el paquete
+     */
+    public boolean enviarArticulo(String pCedula, String pDescripcion, String pRemitente, double pPeso, TTipoSobre pTipo, TContenidoSobre pContenido){
+        if (this.gestorClientes.existeCliente(pCedula)){
+            int numCasillero = this.gestorClientes.getCliente(pCedula).getNumeroCasillero();
+            Sobre articulo = new Sobre(pDescripcion, pRemitente, pPeso, pTipo, pContenido);
+            this.gestorCasilleros.recibirPaquete(numCasillero, articulo);
+            String subject = "Paquete recibido";
+            String contenido = "Ha recibido un nuevo sobre en su casillero\n";
+            contenido += articulo.toString() + "\nEnviado por: " + pRemitente;
+            this.correos.enviarCorreo(this.gestorClientes.getCliente(pCedula).getCorreo(), subject, contenido);
+            return true;
         }
         return false;
     }
     
-    public boolean consultarEstadoCasillero(int pNumCasillero){
-         if (this.llaves.containsKey(pNumCasillero)){
-            int llave = this.llaves.get(pNumCasillero);
-            if (!this.casilleros.get(llave).getArticulos().isEmpty()){
-                return true;
-            }
-        }
+    /**
+     * Función para conseguir los artículos del casillero de un cliente en específico
+     * @param pCedula número de cédula del dueño del casillero a consultar
+     * @return ArrayList con los artículos en el casillero del cliente. Retorna null sin no se encuentra el cliente
+     */
+    public ArrayList<Articulo> getArticulosPendientes(String pCedula){
+        if (this.gestorClientes.existeCliente(pCedula)){
+            int numCasillero = this.gestorClientes.getCliente(pCedula).getNumeroCasillero();
+            return this.gestorCasilleros.getArticulosCasillero(numCasillero);
+        } 
+        return null;
+    }
+    
+    public boolean retirarArticulos(ArrayList<Articulo> pArticulosSeleccionados){
         return false;
     }
     
-    public String recibidosEnFecha(){
-        String str = "";
-        return str;
-    }
     
-    public String entregadosEnFecha(){
-        String str = "";
-        return str;
-    }
     
-     /* ****************************************************************************************************
-        ************************************ Consultas de Divisas ******************************************
-        **************************************************************************************************** */
+    
+    /* ****************************************************************************************************
+       ************************************ Consultas de Divisas ******************************************
+       **************************************************************************************************** */
     
     public double compraDivisa(){
-        return 0;
+       return this.webBanco.getCompra();
     }
     
     public double ventaDivisa(){
-        return 0;
+        return this.webBanco.getVenta();
     }
     
-     /* ****************************************************************************************************
+    /* ****************************************************************************************************
         ****************************************** Generales ***********************************************
         **************************************************************************************************** */    
     
-    public ArrayList<Cliente> pendientes(){
-        ArrayList<Cliente> listado = new ArrayList<Cliente>();
-        
-        for (String cedula : this.expedienteClientes.keySet()){
-            Cliente cliente = this.expedienteClientes.get(cedula);
-            int llave = this.llaves.get(cliente.getNumeroCasillero());
-            if (!this.casilleros.get(llave).getArticulos().isEmpty()){
-                listado.add(cliente);
-            }
-        }
-        return listado;
-    }
-    
-    
-    
-    public static void main(String[] args){
-        
-//        ArrayList<Articulo> articulos = new ArrayList<Articulo>();
-//        Sobre sobre = new Sobre("a", new Cliente("", "", "", "", "", "", new Date()), 12, TTipoSobre.Aéreo, TContenidoSobre.Documento);
-//        Paquete paquete = new Paquete("a", new Cliente("", "", "", "", "", "", new Date()), true, false, 15);
-//        articulos.add(sobre);
-//        articulos.add(paquete);
-//        System.out.println(articulos.get(1).getClass() == Sobre.class);
-        
-        
-        
-    }
-    
+//    public ArrayList<Cliente> pendientes(){
+//        ArrayList<Cliente> listado = new ArrayList<Cliente>();
+//        
+//        for (String cedula : this.expedienteClientes.keySet()){
+//            Cliente cliente = this.expedienteClientes.get(cedula);
+//            int llave = this.llaves.get(cliente.getNumeroCasillero());
+//            if (!this.casilleros.get(llave).getArticulos().isEmpty()){
+//                listado.add(cliente);
+//            }
+//        }
+//        return listado;
+//    }
 }
