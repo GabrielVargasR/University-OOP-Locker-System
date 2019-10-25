@@ -1,31 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
 /**
  *
- * @author Rayforth
+ * @author Gabriel
  */
 public class WebService {
-    
-    private String url;
 
-    public WebService(String url) {
-        this.url = url;
+    public WebService(String url) {}
+    
+    public double getCompra(){
+        return 581.49;
+    }
+    
+    public double getVenta(){
+        return 586.66;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    
-    
-    
 }

@@ -41,4 +41,8 @@ public class Articulo {
     public Cliente getRemitente(){
         return this.remitente;
     }
+    
+    public double getImpuesto(){
+        return this.impuesto;
+    }
 }
