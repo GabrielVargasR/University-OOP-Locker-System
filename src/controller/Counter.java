@@ -3,7 +3,7 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Date;
 
 import model.*;
 
@@ -233,10 +233,44 @@ public class Counter {
         ************************************ Consultas de Divisas ******************************************
         **************************************************************************************************** */
     
-    public int compraDivisa(){
+    public double compraDivisa(){
         return 0;
     }
     
+    public double ventaDivisa(){
+        return 0;
+    }
     
+     /* ****************************************************************************************************
+        ****************************************** Generales ***********************************************
+        **************************************************************************************************** */    
+    
+    public ArrayList<Cliente> pendientes(){
+        ArrayList<Cliente> listado = new ArrayList<Cliente>();
+        
+        for (String cedula : this.expedienteClientes.keySet()){
+            Cliente cliente = this.expedienteClientes.get(cedula);
+            int llave = this.llaves.get(cliente.getNumeroCasillero());
+            if (!this.casilleros.get(llave).getArticulos().isEmpty()){
+                listado.add(cliente);
+            }
+        }
+        return listado;
+    }
+    
+    
+    
+    public static void main(String[] args){
+        
+//        ArrayList<Articulo> articulos = new ArrayList<Articulo>();
+//        Sobre sobre = new Sobre("a", new Cliente("", "", "", "", "", "", new Date()), 12, TTipoSobre.Aéreo, TContenidoSobre.Documento);
+//        Paquete paquete = new Paquete("a", new Cliente("", "", "", "", "", "", new Date()), true, false, 15);
+//        articulos.add(sobre);
+//        articulos.add(paquete);
+//        System.out.println(articulos.get(1).getClass() == Sobre.class);
+        
+        
+        
+    }
     
 }
