@@ -15,6 +15,15 @@ public class Paquete extends Articulo{
         this.electronico = pElectronico;
         this.fragil = pFragil;
         this.peso = pPeso;
+        
+        double imp = this.peso * 0.02;
+        if (electronico){
+            imp += 2;
+        } 
+        if (fragil){
+            imp += 2;
+        }
+        super.impuesto = imp;
     }
 
     public boolean isElectronico() {

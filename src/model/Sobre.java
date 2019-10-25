@@ -20,6 +20,16 @@ public class Sobre extends Articulo {
         this.peso = pPeso;
         this.tipo = pTipo;
         this.contenido = pContenido;
+        
+        if (this.tipo == TTipoSobre.Aéreo && this.contenido == TContenidoSobre.ArticuloPequeño){
+            super.impuesto = 1;
+        } else{
+            if (this.contenido == TContenidoSobre.Documento){
+                super.impuesto = 1;
+            } else{
+                super.impuesto = 2;
+            }
+        }
     }
     
     public double getPeso(){

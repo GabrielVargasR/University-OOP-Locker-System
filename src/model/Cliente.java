@@ -103,12 +103,35 @@ public class Cliente {
         return this.nivel;
     }
     
-    public void incPaquetesRecibidos(){
+    /**
+     * Función para incrementar la cantidad histórica de paquetes recibidos de un cliente
+     * @return boolean para indicar si se cambió de nivel (true) o no (false)
+     */
+    public boolean incPaquetesRecibidos(){
         this.paquetesRecibidos++;
         if (this.paquetesRecibidos > 10 && this.nivel != TNivelCliente.Plata){
-                this.nivel = TNivelCliente.Plata;
+            this.nivel = TNivelCliente.Plata;
+            return true;
         } else if (this.paquetesRecibidos > 20 && this.nivel != TNivelCliente.Oro){
             this.nivel = TNivelCliente.Oro;
+            return true;
         }
+        return false;
     }
+    
+    @Override
+    public String toString(){
+        String str = "Cedula: " + this.cedula + "\n";
+        str += "Nombre: " + this.nombre + "\n";
+        str += "Correo: " + this.correo + "\n";
+        str += "Teléfono: " + this.telefono + "\n";
+        str += "Dirección: " + this.direccion + "\n";
+        str += "Sexo: " + this.sexo + "\n";
+        str += "Fecha de Nacimiento: " + this.fechaNacimiento.toString() + "\n";
+        str += "Número de casillero: " + this.numeroCasillero + "\n";
+        str += "Nivel: " + this.nivel + "\n";
+        return str;
+    }
+    
+    
 }
