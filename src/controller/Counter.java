@@ -142,13 +142,19 @@ public class Counter {
      */
     public boolean enviarArticulo(String pCedula, String pDescripcion, String pRemitente, boolean pElectronico, boolean pFragil, double pPeso){
         if (this.gestorClientes.existeCliente(pCedula)){
-            int numCasillero = this.gestorClientes.getCliente(pCedula).getNumeroCasillero();
+            Cliente cliente = this.gestorClientes.getCliente(pCedula);
+            int numCasillero = cliente.getNumeroCasillero();
             Paquete articulo = new Paquete(pDescripcion, pRemitente, pElectronico, pFragil, pPeso);
             this.gestorCasilleros.recibirPaquete(numCasillero, articulo);
             String subject = "Paquete recibido";
             String contenido = "Ha recibido un nuevo paquete en su casillero\n";
             contenido += articulo.toString() + "\nEnviado por: " + pRemitente;
-            this.correos.enviarCorreo(this.gestorClientes.getCliente(pCedula).getCorreo(), subject, contenido);
+            this.correos.enviarCorreo(cliente.getCorreo(), subject, contenido);
+            if(cliente.incPaquetesRecibidos()){
+                String subject2 = "Cambio de nivel";
+                String contenido2 = "Felicidades, has pasado a nivel " + cliente.getNivel();
+                this.correos.enviarCorreo(cliente.getCorreo(), subject2, contenido2);
+            }
             return true;
         }
         return false;
@@ -166,13 +172,19 @@ public class Counter {
      */
     public boolean enviarArticulo(String pCedula, String pDescripcion, String pRemitente, String pNombre, boolean pCatalogo, TTemaRevista pTema){
         if (this.gestorClientes.existeCliente(pCedula)){
-            int numCasillero = this.gestorClientes.getCliente(pCedula).getNumeroCasillero();
+            Cliente cliente = this.gestorClientes.getCliente(pCedula);
+            int numCasillero = cliente.getNumeroCasillero();
             Revista articulo = new Revista(pDescripcion, pRemitente, pNombre, pCatalogo, pTema);
             this.gestorCasilleros.recibirPaquete(numCasillero, articulo);
             String subject = "Paquete recibido";
             String contenido = "Ha recibido uns nueva revista en su casillero\n";
             contenido += articulo.toString() + "\nEnviado por: " + pRemitente;
-            this.correos.enviarCorreo(this.gestorClientes.getCliente(pCedula).getCorreo(), subject, contenido);
+            this.correos.enviarCorreo(cliente.getCorreo(), subject, contenido);
+            if(cliente.incPaquetesRecibidos()){
+                String subject2 = "Cambio de nivel";
+                String contenido2 = "Felicidades, has pasado a nivel " + cliente.getNivel();
+                this.correos.enviarCorreo(cliente.getCorreo(), subject2, contenido2);
+            }
             return true;
         }
         return false;
@@ -190,13 +202,19 @@ public class Counter {
      */
     public boolean enviarArticulo(String pCedula, String pDescripcion, String pRemitente, double pPeso, TTipoSobre pTipo, TContenidoSobre pContenido){
         if (this.gestorClientes.existeCliente(pCedula)){
-            int numCasillero = this.gestorClientes.getCliente(pCedula).getNumeroCasillero();
+            Cliente cliente = this.gestorClientes.getCliente(pCedula);
+            int numCasillero = cliente.getNumeroCasillero();
             Sobre articulo = new Sobre(pDescripcion, pRemitente, pPeso, pTipo, pContenido);
             this.gestorCasilleros.recibirPaquete(numCasillero, articulo);
             String subject = "Paquete recibido";
             String contenido = "Ha recibido un nuevo sobre en su casillero\n";
             contenido += articulo.toString() + "\nEnviado por: " + pRemitente;
-            this.correos.enviarCorreo(this.gestorClientes.getCliente(pCedula).getCorreo(), subject, contenido);
+            this.correos.enviarCorreo(cliente.getCorreo(), subject, contenido);
+            if(cliente.incPaquetesRecibidos()){
+                String subject2 = "Cambio de nivel";
+                String contenido2 = "Felicidades, has pasado a nivel " + cliente.getNivel();
+                this.correos.enviarCorreo(cliente.getCorreo(), subject2, contenido2);
+            }
             return true;
         }
         return false;
@@ -215,8 +233,23 @@ public class Counter {
         return null;
     }
     
-    public boolean retirarArticulos(ArrayList<Articulo> pArticulosSeleccionados){
-        return false;
+    /**
+     * Función para retirar artículos de un casillero
+     * @param pArticulosSeleccionados ArrayList de articulos seleccionados en la gui para retirar
+     * @return precio total de los artículos a retirar. Si 
+     */
+    public double retirarArticulos(ArrayList<Articulo> pArticulosSeleccionados){
+        double tipoCambio = this.compraDivisa();
+        double subTotalDolar = 0;
+        double subTotalColones = 0;
+        
+        
+        
+        for (Articulo articulo : pArticulosSeleccionados){
+            subTotalDolar += articulo.getImpuestoDolar();
+            subTotalColones += articulo.getImpuestoColones(tipoCambio);
+        }
+        return -1;
     }
     
     
@@ -238,16 +271,15 @@ public class Counter {
         ****************************************** Generales ***********************************************
         **************************************************************************************************** */    
     
-//    public ArrayList<Cliente> pendientes(){
-//        ArrayList<Cliente> listado = new ArrayList<Cliente>();
-//        
-//        for (String cedula : this.expedienteClientes.keySet()){
-//            Cliente cliente = this.expedienteClientes.get(cedula);
-//            int llave = this.llaves.get(cliente.getNumeroCasillero());
-//            if (!this.casilleros.get(llave).getArticulos().isEmpty()){
-//                listado.add(cliente);
-//            }
-//        }
-//        return listado;
-//    }
+    public ArrayList<Cliente> pendientes(){
+        ArrayList<Cliente> listado = new ArrayList<Cliente>();
+        for (Cliente cliente : this.gestorClientes.consultarClientes()){
+            ArrayList<Articulo> pendientes = this.gestorCasilleros.getArticulosCasillero(cliente.getNumeroCasillero());
+            if (!pendientes.isEmpty()){
+                listado.add(cliente);
+                cliente.setCantidadPendientes(listado.size());
+            }
+        }
+        return listado;
+    }
 }
