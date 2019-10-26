@@ -19,6 +19,7 @@ public class Cliente {
     private int numeroCasillero;
     private TNivelCliente nivel;
     private int paquetesRecibidos;
+    private int cantidadPendientes;
     
 
     public Cliente(String pCedula, String pNombre, String pCorreo, String pTelefono, String pDirección, String pSexo, Date pNacimiento) {
@@ -117,6 +118,14 @@ public class Cliente {
             return true;
         }
         return false;
+    }
+    
+    public int getCantidadPendientes(){
+        return this.cantidadPendientes;
+    }
+    
+    public void setCantidadPendientes(int pCantidadPendientes){
+        this.cantidadPendientes = pCantidadPendientes;
     }
     
     @Override

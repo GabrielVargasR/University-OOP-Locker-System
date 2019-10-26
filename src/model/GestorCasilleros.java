@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Date;
 
 /**
  *
@@ -61,5 +62,7 @@ public class GestorCasilleros {
     public void recibirPaquete(int pNumCasillero, Articulo pArticulo){
         Casillero casillero = this.casilleros.get(this.llaves.get(pNumCasillero));
         casillero.agregarArticulo(pArticulo);
+        this.recibidos.add(pArticulo);
+        pArticulo.setFechaRecibido(new Date());
     }
 }

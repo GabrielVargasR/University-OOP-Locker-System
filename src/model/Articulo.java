@@ -1,6 +1,7 @@
 package model;
 
 import java.util.UUID;
+import java.util.Date;
 
 /**
  *
@@ -9,29 +10,38 @@ import java.util.UUID;
 public class Articulo {
 
     protected UUID id;
-    protected boolean entregado; // retirado o no
-    protected String descripcion;
-    protected String remitente;
-    protected double impuesto;
+    private boolean retirado; // retirado o no
+    private final String descripcion;
+    private final String remitente;
+    private double impuestoColones;
+    private String calculoImpCol;
+    protected double impuestoDolar;
+    protected String calculoImpDolar;
+    private Date fechaRecibido;
+    private Date fechaRetirado;
 
     public Articulo(String pDescripcion, String pRemitente) {
         this.id = UUID.randomUUID();
-        this.entregado = false;
+        this.retirado = false;
         this.descripcion = pDescripcion;
         this.remitente = pRemitente;
-        this.impuesto = 0;
+        this.impuestoColones = 0;
+        this.calculoImpCol = "";
+        this.impuestoDolar = 0;
+        this.calculoImpDolar = "";
+        
     }
 
     public UUID getId() {
         return this.id;
     }
 
-    public boolean getEstado() {
-        return this.entregado;
+    public boolean isRetirado() {
+        return this.retirado;
     }
 
-    public void entregado() {
-        this.entregado = true;
+    public void retirar() {
+        this.retirado = true;
     }
 
     public String getDescripcion() {
@@ -42,7 +52,39 @@ public class Articulo {
         return this.remitente;
     }
     
-    public double getImpuesto(){
-        return this.impuesto;
+    public double getImpuestoColones(double pTipoCambio){
+        this.impuestoColones = this.impuestoDolar * pTipoCambio;
+        this.calculoImpCol += this.impuestoDolar + " x " + pTipoCambio;
+        return this.impuestoColones;
     }
+    
+    public String getCalculoImpColones(){
+        return this.calculoImpCol;
+    }
+    
+    public String getCalculoImpDolar(){
+        return this.calculoImpDolar;
+    }
+    
+    public double getImpuestoDolar(){
+        return this.impuestoDolar;
+    }
+
+    public Date getFechaRecibido() {
+        return this.fechaRecibido;
+    }
+
+    public void setFechaRecibido(Date pFechaRecibido) {
+        this.fechaRecibido = pFechaRecibido;
+    }
+
+    public Date getFechaRetirado() {
+        return this.fechaRetirado;
+    }
+
+    public void setFechaRetirado(Date pFechaRetirado) {
+        this.fechaRetirado = pFechaRetirado;
+    }
+    
+    
 }

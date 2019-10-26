@@ -21,13 +21,18 @@ public class Sobre extends Articulo {
         this.tipo = pTipo;
         this.contenido = pContenido;
         
-        if (this.tipo == TTipoSobre.Aéreo && this.contenido == TContenidoSobre.ArticuloPequeño){
-            super.impuesto = 1;
+        if (this.tipo == TTipoSobre.Aéreo){
+            if (this.contenido == TContenidoSobre.ArticuloPequeño){
+                super.impuestoDolar = 1;
+                super.calculoImpDolar += "Aéreo y Artículo Pequeño: paga $1";
+            } else {super.calculoImpDolar += "Aéreo y Documento no paga impuestos";}
         } else{
             if (this.contenido == TContenidoSobre.Documento){
-                super.impuesto = 1;
+                super.impuestoDolar = 1;
+                super.calculoImpDolar += "Manila y Documento : paga $1";
             } else{
-                super.impuesto = 2;
+                super.impuestoDolar = 2;
+                super.calculoImpDolar += "Manila y Artículo Pequeño: paga $2";
             }
         }
     }

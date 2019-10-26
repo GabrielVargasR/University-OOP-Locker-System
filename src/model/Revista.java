@@ -17,8 +17,11 @@ public class Revista extends Articulo{
         this.tema = pTema;
         
         if (!this.catalogo){
-            super.impuesto = 1;
-        }
+            super.impuestoDolar = 1;
+            super.calculoImpDolar += "Monto exacto de $1 para revistar";
+        } else{ super.calculoImpDolar += "No paga impuestos por ser un catálogo"; }
+        
+        
     }
 
     public String getNombre() {
