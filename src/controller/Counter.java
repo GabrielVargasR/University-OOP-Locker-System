@@ -11,6 +11,7 @@ import model.ManejoCorreos;
 import model.BCCRClient;
 
 import java.util.ArrayList;
+import java.util.Date;
 import model.TContenidoSobre;
 import model.TTemaRevista;
 import model.TTipoSobre;
@@ -122,6 +123,10 @@ public class Counter {
         return "No existe cliente con esa cédula";
     }
     
+    /**
+     * Función para consultar todos los clientes registrados
+     * @return ArrayList de todos los clientes registrados
+     */
     public ArrayList<Cliente> consultarClientes(){
         return this.gestorClientes.consultarClientes();
     }
@@ -234,26 +239,94 @@ public class Counter {
     }
     
     /**
-     * Función para retirar artículos de un casillero
+     * Función para calcular el precio total en dolares de los artículos seleccionados
      * @param pArticulosSeleccionados ArrayList de articulos seleccionados en la gui para retirar
-     * @return precio total de los artículos a retirar. Si 
+     * @param pCedula número de cédula del cliente que está retirando
+     * @return precio total de los artículos a retirar
      */
-    public double retirarArticulos(ArrayList<Articulo> pArticulosSeleccionados){
+    public double calculaTotalDolares(ArrayList<Articulo> pArticulosSeleccionados, String pCedula){
+        double subTotalDolar = 0;
+        for (Articulo articulo : pArticulosSeleccionados){
+            subTotalDolar += articulo.getImpuestoDolar();
+        }
+        Cliente cliente = this.gestorClientes.getCliente(pCedula);
+        return cliente.pedirDescuento(subTotalDolar);
+    }
+    
+    /**
+     * Función para calcular el precio total en colones de los artículos seleccionados
+     * @param pArticulosSeleccionados ArrayList de articulos seleccionados en la gui para retirar
+     * @param pCedula número de cédula del cliente que está retirando
+     * @return precio total de los artículos a retirar
+     */
+    public double calculaTotalColones(ArrayList<Articulo> pArticulosSeleccionados, String pCedula){
         double tipoCambio = this.compraDivisa();
         double subTotalDolar = 0;
         double subTotalColones = 0;
-        
-        
-        
         for (Articulo articulo : pArticulosSeleccionados){
             subTotalDolar += articulo.getImpuestoDolar();
             subTotalColones += articulo.getImpuestoColones(tipoCambio);
         }
-        return -1;
+        Cliente cliente = this.gestorClientes.getCliente(pCedula);
+        return cliente.pedirDescuento(subTotalColones);
     }
     
+    /**
+     * Función para retirar los paquetes
+     * @param pArticulosSeleccionados ArrayList de articulos seleccionados en la gui para retirar
+     * @param pCedula número de cédula del cliente que está retirando
+     * @return boolean para indicar si se pudo retirar o no los artículos
+     */
+    public boolean retirarArticulos(ArrayList<Articulo> pArticulosSeleccionados, String pCedula){
+        int numCasillero = this.gestorClientes.getCliente(pCedula).getNumeroCasillero();
+        if (this.gestorCasilleros.retirarPaquetes(numCasillero, pArticulosSeleccionados)){
+            return true;
+        }
+       return false;
+    }
+
+    /* ****************************************************************************************************
+       ************************************ Consultas de Entregables **************************************
+       **************************************************************************************************** */
     
+    /**
+     * Función para determinar si el casillero de un cliente está vacío o no
+     * @param pCedula número de cédula del cliente
+     * @return boolean para indicar si es†á vacío (false) o no (true)
+     */
+    public boolean estadoCasillero(String pCedula){
+        if (this.gestorClientes.existeCliente(pCedula)){
+            int numCasillero = this.gestorClientes.getCliente(pCedula).getNumeroCasillero();
+            return this.gestorCasilleros.estadoCasillero(numCasillero);
+        }
+        return false;
+    }
     
+    /**
+     * Función para determinar si un casillero está vacío o no
+     * @param pNumCasillero número de casillero del cliente
+     * @return boolean para indicar si es†á vacío (false) o no (true)
+     */
+    public boolean estadoCasillero(int pNumCasillero){
+        return this.gestorCasilleros.estadoCasillero(pNumCasillero);
+    }
+    
+    public void detalleRecibidos(Date pDate){}
+    
+    public void detalleEntregados(Date pDate){}
+    
+    public void articulosPendientes(){}
+    
+    /**
+     * Función para obtener la información de pago de un artículo retirado
+     * @param pArticulo artículo seleccionado
+     * @return String con la información de retiro
+     */
+    public String detalleRetiro(Articulo pArticulo){
+        String str = "Dólares: " + pArticulo.getCalculoImpDolar() + " " + pArticulo.getCalculoImpDolar() + "\n";
+        str += "Colones: " + pArticulo.getImpuestoColones(this.ventaDivisa()) + " " + pArticulo.getCalculoImpColones();
+        return str;
+    }    
     
     /* ****************************************************************************************************
        ************************************ Consultas de Divisas ******************************************
@@ -269,9 +342,11 @@ public class Counter {
     
     /* ****************************************************************************************************
         ****************************************** Generales ***********************************************
-        **************************************************************************************************** */    
+        **************************************************************************************************** */   
     
-    public ArrayList<Cliente> pendientes(){
+    public void enviarCorreo(){}
+    
+    public ArrayList<Cliente> clientsPendientes(){
         ArrayList<Cliente> listado = new ArrayList<Cliente>();
         for (Cliente cliente : this.gestorClientes.consultarClientes()){
             ArrayList<Articulo> pendientes = this.gestorCasilleros.getArticulosCasillero(cliente.getNumeroCasillero());
@@ -282,4 +357,6 @@ public class Counter {
         }
         return listado;
     }
+    
+    public void resumenContable(Date pDate){}
 }

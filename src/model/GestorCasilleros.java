@@ -28,7 +28,7 @@ public class GestorCasilleros {
         }
     }
     
-    // Quitar visibilidad a cliente (arreglar en counter también)
+    
     public int asignarCasillero(Cliente pCliente){
         for (Casillero casillero : this.casilleros){
             if (!casillero.isOcupado()){
@@ -64,5 +64,20 @@ public class GestorCasilleros {
         casillero.agregarArticulo(pArticulo);
         this.recibidos.add(pArticulo);
         pArticulo.setFechaRecibido(new Date());
+    }
+    
+    public boolean retirarPaquetes(int pNumCasillero, ArrayList<Articulo> pArticulosSeleccionados){
+        Casillero casillero = this.casilleros.get(this.llaves.get(pNumCasillero));
+        if (casillero.retirarArticulos(pArticulosSeleccionados)){
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean estadoCasillero(int pNumCasillero){
+        if (!this.casilleros.get(this.llaves.get(pNumCasillero)).isEmpty()){
+            return true;
+        }
+        return false;
     }
 }

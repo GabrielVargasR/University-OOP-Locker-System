@@ -29,7 +29,6 @@ public class Articulo {
         this.calculoImpCol = "";
         this.impuestoDolar = 0;
         this.calculoImpDolar = "";
-        
     }
 
     public UUID getId() {
