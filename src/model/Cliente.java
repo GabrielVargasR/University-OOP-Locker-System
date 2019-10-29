@@ -5,7 +5,7 @@ import model.TNivelCliente;
 
 /**
  *
- * @author gabriel
+ * @author Gabriel
  */
 public class Cliente {
     

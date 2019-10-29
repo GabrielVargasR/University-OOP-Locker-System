@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Usuario
+ * @author Gabriel
  */
 public class Casillero {
     

@@ -18,7 +18,7 @@ import model.TTipoSobre;
 
 /**
  *
- * @author gabriel
+ * @author Gabriel
  */
 public class Counter {
     private String nombre;

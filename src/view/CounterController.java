@@ -21,6 +21,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
+import controller.Counter;
+
 /**
  * FXML Controller class
  *
@@ -29,7 +31,7 @@ import javafx.scene.layout.Pane;
  */
 public class CounterController implements Initializable {
     
-
+    private Counter counter;
     private Pane current;
     
     @FXML
@@ -408,22 +410,20 @@ public class CounterController implements Initializable {
         if(!validaNombre(nombre)){
             mensaje.setText("El nombre ingresado no es válido");
             mensaje.setVisible(true);
+        } else if(!validaCedula(cedula)){
+            mensaje.setText("El número de cédula jurídico debe estar compuesto por 10 digitos");
+            mensaje.setVisible(true);
+        } else if(!validaNumero(cantidad)){
+            mensaje.setText("La cantidad de espacios del counter, debe ser un número entero");
+            mensaje.setVisible(true);
+        } else if(!validaNombre(direccion)){
+            mensaje.setText("Se debe ingresar una dirección");
+            mensaje.setVisible(true);
+        } else{
+            int cantidadCasilleros = Integer.parseInt(cantidad);
+            this.counter = new Counter(nombre, cedula, direccion, cantidadCasilleros);
+            quitarPaneCounter();
         }
-        else if(!validaCedula(cedula)){
-                mensaje.setText("El número de cédula jurídico debe estar compuesto por 10 digitos");
-                mensaje.setVisible(true);
-            }
-            else if(!validaNumero(cantidad)){
-                    mensaje.setText("La cantidad de espacios del counter, debe ser un número entero");
-                    mensaje.setVisible(true);
-                }
-                else if(!validaNombre(direccion)){
-                        mensaje.setText("Se debe ingresar una dirección");
-                        mensaje.setVisible(true);
-                    }
-                    else{
-                        quitarPaneCounter();
-                    }
     }
     
     /**
@@ -442,25 +442,29 @@ public class CounterController implements Initializable {
         if(!validaNombre(nombre)){
             mensajeRegistroCliente.setText("El nombre ingresado no es válido");
             mensajeRegistroCliente.setVisible(true);
-        }
-        else if(!validaCedulaFisica(cedula)){
-                mensajeRegistroCliente.setText("El número de cédula fisica debe estar compuesto por 9 digitos, incluyendo los ceros");
-                mensajeRegistroCliente.setVisible(true);
+        } else if(!validaCedulaFisica(cedula)){
+            mensajeRegistroCliente.setText("El número de cédula fisica debe estar compuesto por 9 digitos, incluyendo los ceros");
+            mensajeRegistroCliente.setVisible(true);
+        } else if(!validacionCorreo(correo)){
+            mensajeRegistroCliente.setText("El correo ingresado no tiene un formato válido");
+            mensajeRegistroCliente.setVisible(true);
+        } else if(!validacionNumeroTelefono(telefono)){
+            mensajeRegistroCliente.setText("El número de telefóno no es válido");
+            mensajeRegistroCliente.setVisible(true);
+        }//FALTA VALIDAR LA ENTRADA DE GENERO Y FECHA DE NACIMIENTO
+        else{
+            int numCasillero = this.counter.registrarCliente(nombre, cedula, correo, telefono, "", "", 29, 9, 1999);
+            if (numCasillero != 0){
+                mensajeRegistroCliente.setText("Cliente registrado con éxito. Se le asignó el casillero número: " + numCasillero);
+                nombreCliente.setText("");
+                cedulaCliente.setText("");
+                direccionCorreoCliente.setText("");
+                telefonoCliente.setText("");
+                PaneRegistrarCliente.setVisible(false);
+            } else{
+                mensajeRegistroCliente.setText("Ya hay un cliente registrado con ese número de cédula");
             }
-            else if(!validacionCorreo(correo)){
-                    mensajeRegistroCliente.setText("El correo ingresado no tiene un formato válido");
-                    mensajeRegistroCliente.setVisible(true);
-                }
-                else if(!validacionNumeroTelefono(telefono)){
-                        mensajeRegistroCliente.setText("El número de telefóno no es válido");
-                        mensajeRegistroCliente.setVisible(true);
-                    }
-                
-                //FALTA VALIDAR LA ENTRADA DE GENERO Y FECHA DE NACIMIENTO
-                
-                    else{
-                        PaneRegistrarCliente.setVisible(false);
-                    }
+        }
     }
     
     /**

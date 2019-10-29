@@ -6,7 +6,7 @@ import java.util.Date;
 
 /**
  *
- * @author gabriel
+ * @author Gabriel
  */
 public class GestorClientes {
     private HashMap<String, Cliente> expedienteClientes;

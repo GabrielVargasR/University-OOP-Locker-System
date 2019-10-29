@@ -14,7 +14,7 @@ import javax.mail.Transport;
 
 /**
  *
- * @author gabriel
+ * @author Gabriel
  */
 public class ManejoCorreos {
     private static ManejoCorreos singleton;
