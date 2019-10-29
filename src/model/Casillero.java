@@ -47,8 +47,8 @@ public class Casillero {
         return false;
     }
     
-    public boolean retirarArticulo(Articulo pArticulo){
-        if (this.contenidos.remove(pArticulo)){
+    public boolean retirarArticulos(ArrayList<Articulo> pArticulos){
+        if (this.contenidos.removeAll(pArticulos)){
             return true;
         }
         return false;

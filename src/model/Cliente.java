@@ -128,6 +128,18 @@ public class Cliente {
         this.cantidadPendientes = pCantidadPendientes;
     }
     
+    public double pedirDescuento(double pPrecio){
+        double precioFinal = pPrecio;
+        
+        if (this.getNivel() == TNivelCliente.Plata){
+            precioFinal *= 0.95;
+        } else if (this.getNivel() == TNivelCliente.Oro){
+            precioFinal *= 0.90;
+        }
+        
+        return precioFinal;
+    }
+    
     @Override
     public String toString(){
         String str = "Cedula: " + this.cedula + "\n";
