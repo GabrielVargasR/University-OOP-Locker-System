@@ -6,7 +6,7 @@ import model.TContenidoSobre;
 
 /**
  *
- * @author gabriel
+ * @author Gabriel
  */
 public class Sobre extends Articulo {
 

@@ -2,7 +2,7 @@ package model;
 
 /**
  *
- * @author gabriel
+ * @author Gabriel
  */
 public class Paquete extends Articulo{
 

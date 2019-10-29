@@ -2,7 +2,7 @@ package model;
 
 /**
  *
- * @author gabriel
+ * @author Gabriel
  */
 public class Revista extends Articulo{
 
