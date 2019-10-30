@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package view;
 
 import java.net.URL;
@@ -17,6 +11,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -28,11 +23,13 @@ import controller.Counter;
  *
  * @author Rayforth
  * @author Josué
+ * @author Gabriel
  */
 public class CounterController implements Initializable {
     
     private Counter counter;
     private Pane current;
+    private Label currentLabel;
     
     @FXML
     private Pane ModificarSistema;    
@@ -109,6 +106,12 @@ public class CounterController implements Initializable {
     private TextField telefonoCliente;
     @FXML
     private Label mensajeRegistroCliente;
+    @FXML
+    private ChoiceBox anio;
+    @FXML
+    private ChoiceBox mes;
+    @FXML
+    private ChoiceBox dia;
     
     //Para consultar cliente
     
@@ -205,8 +208,37 @@ public class CounterController implements Initializable {
             current = pPane;
             pPane.setVisible(true);
         }else{
-            current=pPane;
+            current = pPane;
             pPane.setVisible(true);
+        }
+        
+        if (currentLabel != null){
+            currentLabel.setVisible(false);
+        }
+    }
+    
+    /**
+     * Metodo que realiza la actualizacion de ventanas
+     * @param pPane es el pane que va actualizar
+     * @param pLabel label de mensaje de la ventana
+     */
+    private void refresh(Pane pPane, Label pLabel){
+        if(current != null){
+            current.setVisible(false);
+            current = pPane;
+            pPane.setVisible(true);
+        } else{
+            current = pPane;
+            pPane.setVisible(true);
+        }
+        
+        if(currentLabel != null){
+            currentLabel.setVisible(false);
+            currentLabel = pLabel;
+            currentLabel.setVisible(true);
+        }else{
+            currentLabel = pLabel;
+            currentLabel.setVisible(true);
         }
     }
     
@@ -228,7 +260,6 @@ public class CounterController implements Initializable {
         panel.setVisible(false);
         menu.setVisible(true);
         Imagen.setVisible(true);
-        
     }
     
     /**
@@ -237,7 +268,7 @@ public class CounterController implements Initializable {
      */
     @FXML
     private void mostrarPaneRegistarCliente(ActionEvent e){
-        refresh(PaneRegistrarCliente);    
+        refresh(PaneRegistrarCliente, mensajeRegistroCliente);    
     }
     
     /**
@@ -432,12 +463,16 @@ public class CounterController implements Initializable {
      */
     @FXML
     private void registrarCliente(ActionEvent e){
-        refresh(PaneRegistrarCliente);
         
         String nombre = nombreCliente.getText();
         String cedula = cedulaCliente.getText();
         String correo = direccionCorreoCliente.getText();
         String telefono = telefonoCliente.getText();
+        String sexo = ((RadioButton) this.tgGroup.getSelectedToggle()).getText();
+        int dia = Integer.parseInt((String) this.dia.getValue());
+        int mes = Integer.parseInt((String) this.mes.getValue());
+        int anno = Integer.parseInt((String) this.anio.getValue());
+        
         
         if(!validaNombre(nombre)){
             mensajeRegistroCliente.setText("El nombre ingresado no es válido");
@@ -453,14 +488,17 @@ public class CounterController implements Initializable {
             mensajeRegistroCliente.setVisible(true);
         }//FALTA VALIDAR LA ENTRADA DE GENERO Y FECHA DE NACIMIENTO
         else{
-            int numCasillero = this.counter.registrarCliente(nombre, cedula, correo, telefono, "", "", 29, 9, 1999);
+            int numCasillero = this.counter.registrarCliente(nombre, cedula, correo, telefono, "", sexo, dia, mes, anno);
             if (numCasillero != 0){
                 mensajeRegistroCliente.setText("Cliente registrado con éxito. Se le asignó el casillero número: " + numCasillero);
                 nombreCliente.setText("");
                 cedulaCliente.setText("");
                 direccionCorreoCliente.setText("");
                 telefonoCliente.setText("");
-                PaneRegistrarCliente.setVisible(false);
+                tgGroup.selectToggle(null);
+                this.dia.setValue(null);
+                this.mes.setValue(null);
+                this.anio.setValue(null);
             } else{
                 mensajeRegistroCliente.setText("Ya hay un cliente registrado con ese número de cédula");
             }
