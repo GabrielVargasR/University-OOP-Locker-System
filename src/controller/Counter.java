@@ -323,11 +323,27 @@ public class Counter {
         return this.gestorCasilleros.estadoCasillero(pNumCasillero);
     }
     
-    public void detalleRecibidos(Date pDate){}
+    /**
+     * Función para obtener los artículos recibidos en una fecha en particular
+     * @param pDate fecha consultada
+     * @return artículos recibidos en esa fecha
+     */
+    public ArrayList<Articulo> detalleRecibidos(Date pDate){
+        return this.gestorCasilleros.detalleRecibidos(pDate);
+    }
     
-    public void detalleEntregados(Date pDate){}
+    /**
+     * Función para obtener los artículos entregados en una fecha en particular
+     * @param pDate fecha consultada
+     * @return artículos entregados en esa fecha
+     */
+    public ArrayList<Articulo> detalleEntregados(Date pDate){
+        return this.gestorCasilleros.detalleEntregados(pDate);
+    }
     
-    public void articulosPendientes(){}
+    public void articulosPendientes(){
+    
+    }
     
     /**
      * Función para obtener la información de pago de un artículo retirado

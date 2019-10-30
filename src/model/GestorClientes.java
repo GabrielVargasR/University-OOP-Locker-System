@@ -56,6 +56,10 @@ public class GestorClientes {
         return clientes;
     }
     
+    public void pendientes(){
+      
+    }
+    
     public static void main(String[] args){
         GestorClientes gc = new GestorClientes();
         gc.registrarCliente("117560590", "Gabriel", "gabriel.vargasr99@gmail.com", "12121212", "sdsw", "Masculino", 1999, 9, 29);

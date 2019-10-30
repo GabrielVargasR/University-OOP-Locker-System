@@ -17,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 import controller.Counter;
+import model.TTemaRevista;
 
 /**
  * FXML Controller class
@@ -592,7 +593,7 @@ public class CounterController implements Initializable {
      */
     @FXML
     private void mostrarRevista(ActionEvent e){
-        refresh(Revista);    
+        refresh(Revista, mensajeRevista);    
     }
     
     /**
@@ -602,6 +603,83 @@ public class CounterController implements Initializable {
     @FXML
     private void mostrarRetirar(ActionEvent e){
         refresh(Retirar);    
+    }
+    
+    /**
+     * Método que registra una revista
+     * @param e action event
+     */
+    @FXML
+    private void registraRevista(ActionEvent e){
+        String remitente = remitenteRevista.getText();
+        String descripcion = descripcionRevista.getText();
+        String nombre = nombreRevista.getText();
+        
+        if(!validaNombre(remitente)){
+            mensajeRevista.setText("El nombre de remitente es inválido");
+        }
+        else if (descripcion==null){
+            mensajeRevista.setText("Debe de tener una descripción");
+        }
+        else if (!validaNombreNumero(nombre)){
+            mensajeRevista.setText("El nombre de revista es inválido");
+        }
+        else{
+            //this.counter.enviarArticulo(nombre, descripcion, remitente, nombre, true, TTemaRevista.Moda)
+        }
+    }
+    /**
+     * Método que registra una revista
+     * @param e action event
+     */
+    @FXML
+    private void registraSobre(ActionEvent e){
+        String remitente = remitenteSobre.getText();
+        String descripcion = descripcionSobre.getText();
+        String peso = pesoSobre.getText();
+        
+        if(!validaNombre(remitente)){
+            mensajeSobre.setText("El nombre de remitente es inválido");
+            mensajeSobre.setVisible(true);
+        }
+        else if (descripcion==null){
+            mensajeSobre.setText("Debe de tener una descripción");
+            mensajeSobre.setVisible(true);
+        }
+        else if (validaNumeroDouble(peso)){
+            mensajeSobre.setText("El peso del sobre es inválido, debe ser un dato flotante");
+            mensajeSobre.setVisible(true);
+        }
+        else{
+            Sobre.setVisible(false);
+        }
+    }
+    
+    /**
+     * Método que realiza el registro de un paquete 
+     * @param e action event 
+     */
+    @FXML
+    private void registraPaquete(ActionEvent e){
+        String remitente = remitentePaquete.getText();
+        String descripcion = descripcionPaquete.getText();
+        String peso = pesoPaquete.getText();
+        
+        if(!validaNombre(remitente)){
+            mensajePaquete.setText("El nombre de remitente es inválido");
+            mensajePaquete.setVisible(true);
+        }
+        else if (descripcion==null){
+            mensajePaquete.setText("Debe de tener una descripción");
+            mensajePaquete.setVisible(true);
+        }
+        else if (validaNumeroDouble(peso)){
+            mensajePaquete.setText("El peso del sobre es inválido, debe ser un dato flotante");
+            mensajePaquete.setVisible(true);
+        }
+        else{
+            Paquete.setVisible(false);
+        }
     }
     
     /* ****************************************************************************************************
@@ -669,89 +747,6 @@ public class CounterController implements Initializable {
     @FXML
     private void mostrarDineroRecaudadoFecha(ActionEvent e){
         refresh(DineroRecaudadoFecha);    
-    }
-    
-    /**
-     * Método que registra una revista
-     * @param e action event
-     */
-    @FXML
-    private void registraRevista(ActionEvent e){
-        refresh(Revista);
-        String remitente = remitenteRevista.getText();
-        String descripcion = descripcionRevista.getText();
-        String nombre = nombreRevista.getText();
-        
-        if(!validaNombre(remitente)){
-            mensajeRevista.setText("El nombre de remitente es inválido");
-            mensajeRevista.setVisible(true);
-        }
-        else if (descripcion==null){
-            mensajeRevista.setText("Debe de tener una descripción");
-            mensajeRevista.setVisible(true);
-        }
-        else if (!validaNombreNumero(nombre)){
-            mensajeRevista.setText("El nombre de revista es inválido");
-            mensajeRevista.setVisible(true);
-        }
-        else{
-            Revista.setVisible(false);
-        }
-    }
-    /**
-     * Método que registra una revista
-     * @param e action event
-     */
-    @FXML
-    private void registraSobre(ActionEvent e){
-        refresh(Sobre);
-        String remitente = remitenteSobre.getText();
-        String descripcion = descripcionSobre.getText();
-        String peso = pesoSobre.getText();
-        
-        if(!validaNombre(remitente)){
-            mensajeSobre.setText("El nombre de remitente es inválido");
-            mensajeSobre.setVisible(true);
-        }
-        else if (descripcion==null){
-            mensajeSobre.setText("Debe de tener una descripción");
-            mensajeSobre.setVisible(true);
-        }
-        else if (validaNumeroDouble(peso)){
-            mensajeSobre.setText("El peso del sobre es inválido, debe ser un dato flotante");
-            mensajeSobre.setVisible(true);
-        }
-        else{
-            Sobre.setVisible(false);
-        }
-    }
-    
-    /**
-     * Método que realiza el registro de un paquete 
-     * @param e action event 
-     */
-    @FXML
-    private void registraPaquete(ActionEvent e){
-        refresh(Paquete);
-        String remitente = remitentePaquete.getText();
-        String descripcion = descripcionPaquete.getText();
-        String peso = pesoPaquete.getText();
-        
-        if(!validaNombre(remitente)){
-            mensajePaquete.setText("El nombre de remitente es inválido");
-            mensajePaquete.setVisible(true);
-        }
-        else if (descripcion==null){
-            mensajePaquete.setText("Debe de tener una descripción");
-            mensajePaquete.setVisible(true);
-        }
-        else if (validaNumeroDouble(peso)){
-            mensajePaquete.setText("El peso del sobre es inválido, debe ser un dato flotante");
-            mensajePaquete.setVisible(true);
-        }
-        else{
-            Paquete.setVisible(false);
-        }
     }
     
    /**

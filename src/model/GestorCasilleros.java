@@ -80,4 +80,26 @@ public class GestorCasilleros {
         }
         return false;
     }
+    
+    public ArrayList<Articulo> detalleRecibidos(Date pDate){
+        ArrayList<Articulo> recibidosFecha = new ArrayList<Articulo>();
+        for (Articulo articulo : this.recibidos){
+            if (articulo.getFechaRecibido().equals(pDate)){
+                recibidosFecha.add(articulo);
+            }
+        }
+        return recibidosFecha;
+    }
+    
+    public ArrayList<Articulo> detalleEntregados(Date pDate){
+        ArrayList<Articulo> entregadosFecha = new ArrayList<Articulo>();
+        for (Articulo articulo : this.retirados){
+            if (articulo.getFechaRecibido().equals(pDate)){
+                entregadosFecha.add(articulo);
+            }
+        }
+        return entregadosFecha;
+    }
+    
+    public void articulosPendientes(){}
 }
