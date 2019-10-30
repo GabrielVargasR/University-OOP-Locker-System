@@ -7,7 +7,7 @@ package model;
 
 /**
  *
- * @author Usuario
+ * @author Josué
  */
 public enum TTipoSobre {
     

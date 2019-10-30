@@ -1,49 +1,38 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package model;
 
 /**
  *
- * @author Rayforth
+ * @author Gabriel
  */
-public class Revista {
+public class Revista extends Articulo{
 
     private String nombre;
     private boolean catalogo;
     private TTemaRevista tema;
 
-    public Revista(String nombre, boolean catalogo, TTemaRevista tema) {
-        this.nombre = nombre;
-        this.catalogo = catalogo;
-        this.tema = tema;
+    public Revista(String pDescripcion, String pRemitente, String pNombre, boolean pCatalogo, TTemaRevista pTema) {
+        super(pDescripcion, pRemitente);
+        this.nombre = pNombre;
+        this.catalogo = pCatalogo;
+        this.tema = pTema;
+        
+        if (!this.catalogo){
+            super.impuestoDolar = 1;
+            super.calculoImpDolar += "Monto exacto de $1 para revistar";
+        } else{ super.calculoImpDolar += "No paga impuestos por ser un catálogo"; }
+        
+        
     }
 
     public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+        return this.nombre;
     }
 
     public boolean isCatalogo() {
-        return catalogo;
-    }
-
-    public void setCatalogo(boolean catalogo) {
-        this.catalogo = catalogo;
+        return this.catalogo;
     }
 
     public TTemaRevista getTema() {
-        return tema;
+        return this.tema;
     }
-
-    public void setTema(TTemaRevista tema) {
-        this.tema = tema;
-    }
-    
 }

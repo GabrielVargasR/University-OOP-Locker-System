@@ -3,10 +3,10 @@ package model;
 
 /**
  *
- * @author Usuario
+ * @author Josué
  */
 public enum TNivelCliente {
 
-    Normal, Plata, Hora 
+    Normal, Plata, Oro 
     
 }

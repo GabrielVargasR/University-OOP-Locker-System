@@ -1,54 +1,44 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package model;
 
 /**
  *
- * @author Rayforth
+ * @author Gabriel
  */
-public class Paquete {
+public class Paquete extends Articulo{
 
     private boolean electronico;
     private boolean fragil;
-    private int peso;
+    private double peso;
 
-    public Paquete(boolean electronico, boolean fragil, int peso) {
-        this.electronico = electronico;
-        this.fragil = fragil;
-        this.peso = peso;
+    public Paquete(String pDescripcion, String pRemitente, boolean pElectronico, boolean pFragil, double pPeso) {
+        super(pDescripcion, pRemitente);
+        this.electronico = pElectronico;
+        this.fragil = pFragil;
+        this.peso = pPeso;
+        
+        super.calculoImpDolar += pPeso + " (peso) x 0.02"; 
+        
+        double imp = this.peso * 0.02;
+        if (electronico){
+            imp += 2;
+            super.calculoImpDolar += " + 2 (por ser electrónico)";
+        } 
+        if (fragil){
+            imp += 2;
+            super.calculoImpDolar += " + 2 (por ser frágil)";
+        }
+        super.impuestoDolar = imp;
     }
 
     public boolean isElectronico() {
-        return electronico;
-    }
-
-    public void setElectronico(boolean electronico) {
-        this.electronico = electronico;
+        return this.electronico;
     }
 
     public boolean isFragil() {
-        return fragil;
+        return this.fragil;
     }
 
-    public void setFragil(boolean fragil) {
-        this.fragil = fragil;
+    public double getPeso() {
+        return this.peso;
     }
-
-    public int getPeso() {
-        return peso;
-    }
-
-    public void setPeso(int peso) {
-        this.peso = peso;
-    }
-    
-    
-    
-
-
-
 }

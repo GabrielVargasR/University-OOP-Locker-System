@@ -14,27 +14,48 @@ import javax.mail.Transport;
 
 /**
  *
- * @author gabriel
+ * @author Gabriel
  */
 public class ManejoCorreos {
+    private static ManejoCorreos singleton;
+    private String correo;
+    private String password;
+    private Properties properties;
     
-    public ManejoCorreos(){}
+    private ManejoCorreos(){
+        this.correo = "prograpoo123@gmail.com";
+        this.password = "lalairai_lalairala";
+        this.properties =  new Properties();
+        this.properties.put("mail.smtp.auth", "true");
+        this.properties.put("mail.smtp.starttls.enable", "true");
+        this.properties.put("mail.smtp.host", "smtp.gmail.com");
+        this.properties.put("mail.smtp.port", "587");
+    }
     
-    public void enviarCorreo(String pDestino){
+    /**
+     * Función para conseguir instancia de la clase (singleton)
+     * @return instancia única de la clase
+     */
+    public static ManejoCorreos getInstance(){
+        if (singleton == null){
+            singleton = new ManejoCorreos();
+        }
+        return singleton;
+    }
+    
+    /**
+     * Función para enviar un correo
+     * @param pDestino dirección de correo destino
+     * @param pSubject subject del correo a enviar
+     * @param pTexto texto del correo
+     * @return boolean indicando si se pudo enviar o no el correo
+     */
+    public boolean enviarCorreo(String pDestino, String pSubject, String pTexto){
         
-        Properties properties = new Properties();
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.port", "587");
-
-        String emailAddress = "prograpoo123@gmail.com";
-        String password = "lalairai_lalairala";
-        
-        Session session = Session.getInstance(properties,
+        Session session = Session.getInstance(this.properties,
          new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-               return new PasswordAuthentication(emailAddress, password);
+               return new PasswordAuthentication(correo, password);
 	   }
          });
          
@@ -43,19 +64,16 @@ public class ManejoCorreos {
             MimeMessage message = new MimeMessage(session);
 	
             // Agrega fuente
-	    message.setFrom(new InternetAddress(emailAddress));
+	    message.setFrom(new InternetAddress(correo));
 	
             // Agrega Destinatario
 	    message.setRecipient(Message.RecipientType.TO, new InternetAddress(pDestino));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress("Rayforth1616@gmail.com"));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress("gabriel.vargasr99@gmail.com"));
-            
 	
 	    // Subject del correo
-	    message.setSubject("Prueba Java");
+	    message.setSubject(pSubject);
 	
 	    // Contenido del correo
-	    message.setText("Email de prueba enviado desde java");
+	    message.setText(pTexto);
             
             // Envia correo
 	    Transport.send(message);
@@ -63,13 +81,8 @@ public class ManejoCorreos {
             
         } catch (MessagingException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
-    
-    
-    
-   public static void main(String[] args){
-       ManejoCorreos a = new ManejoCorreos();
-       a.enviarCorreo("josuearrietam99@gmail.com");
-   }
 }
