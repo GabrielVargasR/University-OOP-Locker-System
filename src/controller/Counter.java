@@ -107,6 +107,18 @@ public class Counter {
     }
     
     /**
+     * Función para conseguir un cliente en específico
+     * @param pCedula número de cédula del cliente a consultar
+     * @return Cliente consultado
+     */
+    public Cliente getCliente(String pCedula){
+        if (this.gestorClientes.existeCliente(pCedula)){
+            return this.gestorClientes.getCliente(pCedula);
+        } 
+        return null;
+    }
+    
+    /**
      * Función para eliminar un cliente del sistema. Verifica que el casillero del cliente esté vacío y lo desocupa
      * @param pCedula número de cédula del cliente a eliminar
      * @return String con mensaje de éxito o fallo
@@ -311,11 +323,27 @@ public class Counter {
         return this.gestorCasilleros.estadoCasillero(pNumCasillero);
     }
     
-    public void detalleRecibidos(Date pDate){}
+    /**
+     * Función para obtener los artículos recibidos en una fecha en particular
+     * @param pDate fecha consultada
+     * @return artículos recibidos en esa fecha
+     */
+    public ArrayList<Articulo> detalleRecibidos(Date pDate){
+        return this.gestorCasilleros.detalleRecibidos(pDate);
+    }
     
-    public void detalleEntregados(Date pDate){}
+    /**
+     * Función para obtener los artículos entregados en una fecha en particular
+     * @param pDate fecha consultada
+     * @return artículos entregados en esa fecha
+     */
+    public ArrayList<Articulo> detalleEntregados(Date pDate){
+        return this.gestorCasilleros.detalleEntregados(pDate);
+    }
     
-    public void articulosPendientes(){}
+    public void articulosPendientes(){
+    
+    }
     
     /**
      * Función para obtener la información de pago de un artículo retirado
@@ -359,4 +387,10 @@ public class Counter {
     }
     
     public void resumenContable(Date pDate){}
+    
+    public static void main(String[] args){
+        Counter counter = new Counter("", "", "", 15);
+        counter.registrarCliente("117560590", "Gabriel", "gabriel.vargasr99@gmail.com", "12121212", "aaaa", "Masculino", 1999, 9, 29);
+        System.out.println(counter.consultarCliente("117560590"));
+    }
 }

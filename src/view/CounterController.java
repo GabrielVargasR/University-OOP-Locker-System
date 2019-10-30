@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package view;
 
 import java.net.URL;
@@ -17,22 +11,30 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 import controller.Counter;
+import model.TTemaRevista;
 
 /**
  * FXML Controller class
  *
  * @author Rayforth
  * @author Josué
+ * @author Gabriel
  */
 public class CounterController implements Initializable {
     
     private Counter counter;
     private Pane current;
+    private Label currentLabel;
+    private int porcentajeNormal = 0;
+    private int porcentajePlata = 5;
+    private int porcentajeOro = 10;
+    private int cantidadSiguienteNivel = 10;
     
     @FXML
     private Pane ModificarSistema;    
@@ -106,9 +108,18 @@ public class CounterController implements Initializable {
     @FXML
     private TextField direccionCorreoCliente;
     @FXML
+    private TextField direccionCliente;
+    @FXML
     private TextField telefonoCliente;
     @FXML
     private Label mensajeRegistroCliente;
+    @FXML
+    private ChoiceBox anio;
+    @FXML
+    private ChoiceBox mes;
+    @FXML
+    private ChoiceBox dia;
+    
     
     //Para consultar cliente
     
@@ -189,11 +200,21 @@ public class CounterController implements Initializable {
     @FXML
     private TextField modificarCantidad;
     @FXML
-    private TextField porcentaje;
+    private TextField tfPorcentajePlata;
+    @FXML
+    private TextField tfPorcentajeOro;
     @FXML
     private Label mensajeModificar;
     @FXML
     private ImageView Imagen;
+    
+    //Generales
+    @FXML
+    private Label labCompra;
+    @FXML
+    private Label labVenta;
+    
+    
     
     /**
      * Metodo que realiza la actualizacion de ventanas
@@ -205,19 +226,43 @@ public class CounterController implements Initializable {
             current = pPane;
             pPane.setVisible(true);
         }else{
-            current=pPane;
+            current = pPane;
             pPane.setVisible(true);
+        }
+        
+        if (currentLabel != null){
+            currentLabel.setVisible(false);
         }
     }
     
     /**
-     * Metodo que muestra la ventana de modificar el sistema
-     * @param event action que va a realizar
+     * Metodo que realiza la actualizacion de ventanas
+     * @param pPane es el pane que va actualizar
+     * @param pLabel label de mensaje de la ventana
      */
-    @FXML
-    private void mostrarModificarSistema(ActionEvent event){
-        refresh(ModificarSistema);   
+    private void refresh(Pane pPane, Label pLabel){
+        if(current != null){
+            current.setVisible(false);
+            current = pPane;
+            pPane.setVisible(true);
+        } else{
+            current = pPane;
+            pPane.setVisible(true);
+        }
+        
+        if(currentLabel != null){
+            currentLabel.setVisible(false);
+            currentLabel = pLabel;
+            currentLabel.setVisible(true);
+        }else{
+            currentLabel = pLabel;
+            currentLabel.setVisible(true);
+        }
     }
+    
+    /* ***************************************************************************************************
+       ********************************** Creación de counter ********************************************
+       *************************************************************************************************** */
     
     /**
      * Metodo que quita la ventana principal 
@@ -228,8 +273,104 @@ public class CounterController implements Initializable {
         panel.setVisible(false);
         menu.setVisible(true);
         Imagen.setVisible(true);
-        
     }
+    
+    /**
+     * Método que crea el counter
+     * @param e Action event 
+     */
+    @FXML
+    private void crearCounter(ActionEvent e){
+        
+        refresh(panel);
+        mensaje.setVisible(false);
+        String nombre = nombreCounter.getText();
+        String cedula = cedulaCounter.getText();
+        String direccion = direccionCounter.getText();
+        String cantidad = cantidadCounter.getText();
+        
+        if(!validaNombre(nombre)){
+            mensaje.setText("El nombre ingresado no es válido");
+            mensaje.setVisible(true);
+        } else if(!validaCedula(cedula)){
+            mensaje.setText("El número de cédula jurídico debe estar compuesto por 10 digitos");
+            mensaje.setVisible(true);
+        } else if(!validaNumero(cantidad)){
+            mensaje.setText("La cantidad de espacios del counter, debe ser un número entero");
+            mensaje.setVisible(true);
+        } else if(!validaNombre(direccion)){
+            mensaje.setText("Se debe ingresar una dirección");
+            mensaje.setVisible(true);
+        } else{
+            int cantidadCasilleros = Integer.parseInt(cantidad);
+            this.counter = new Counter(nombre, cedula, direccion, cantidadCasilleros);
+            quitarPaneCounter();
+        }
+    }
+    
+    /* ****************************************************************************************************
+       ***************************************** Generales ************************************************
+       **************************************************************************************************** */
+    
+    /**
+     * Metodo que muestra la ventana de Compra del dolar
+     * @param e Action a realizar
+     */
+    @FXML
+    private void mostrarCompraDolar(ActionEvent e){
+        refresh(CompraDolar, labCompra); 
+        labCompra.setText(Double.toString(this.counter.compraDivisa()));
+    }
+    
+    /**
+     * Metodo que muestra la ventana de Venta del dolar
+     * @param e Action a realizar
+     */
+    @FXML
+    private void mostrarVentaDolar(ActionEvent e){
+        refresh(VentaDolar, labVenta);
+        labVenta.setText(Double.toString(this.counter.ventaDivisa()));
+    }
+    
+    /**
+     * Metodo que muestra la ventana de modificar el sistema
+     * @param event action que va a realizar
+     */
+    @FXML
+    private void mostrarModificarSistema(ActionEvent event){
+        refresh(ModificarSistema);
+        
+        modificarCantidad.setText(Integer.toString(this.cantidadSiguienteNivel));
+        tfPorcentajePlata.setText(Integer.toString(this.porcentajePlata));
+        tfPorcentajeOro.setText(Integer.toString(this.porcentajeOro));
+    }
+    
+    /**
+     * Metodo para modificar la cantidad y procentaje para subir de nivel
+     * @param e action event
+     */
+    @FXML
+    private void modificarParametros(ActionEvent e){
+        
+        String cantidad = modificarCantidad.getText();
+        String inpPorcentajePlata = this.tfPorcentajePlata.getText();
+        String inpPorcentajeOro = this.tfPorcentajeOro.getText();
+        
+        if (!validaNumero(cantidad)){
+            mensajeModificar.setText("La cantidad ingresada no es correcta");
+        } else if (!validaNumero(inpPorcentajePlata)){
+            mensajeModificar.setText("El porcentaje ingresado no es correcto");
+        } else{
+            this.cantidadSiguienteNivel = Integer.parseInt(cantidad);
+            this.porcentajePlata = Integer.parseInt(inpPorcentajePlata);
+            this.porcentajeOro = Integer.parseInt(inpPorcentajeOro);
+        }
+    }
+    
+    
+    /* ***************************************************************************************************
+       ********************************** Administración de Clientes *************************************
+       *************************************************************************************************** */
     
     /**
      * Metodo que muestra la ventana de Registrar un Cliente
@@ -237,7 +378,7 @@ public class CounterController implements Initializable {
      */
     @FXML
     private void mostrarPaneRegistarCliente(ActionEvent e){
-        refresh(PaneRegistrarCliente);    
+        refresh(PaneRegistrarCliente, mensajeRegistroCliente);    
     }
     
     /**
@@ -246,7 +387,7 @@ public class CounterController implements Initializable {
      */
     @FXML
     private void mostrarPaneConsultarCliente(ActionEvent e){
-        refresh(PaneConsultarCliente);    
+        refresh(PaneConsultarCliente, mensajeConsultaCliente);    
     }
     
     /**
@@ -255,7 +396,7 @@ public class CounterController implements Initializable {
      */
     @FXML
     private void mostrarPaneModificarCliente(ActionEvent e){
-        refresh(PaneModificarCliente);    
+        refresh(PaneModificarCliente, mensajeRegistroCliente);    
     }
 
     /**
@@ -264,7 +405,7 @@ public class CounterController implements Initializable {
      */
     @FXML
     private void mostrarPaneEliminarCliente(ActionEvent e){
-        refresh(PaneEliminarCliente);    
+        refresh(PaneEliminarCliente, mensajeEliminado);    
     }
     
     /**
@@ -273,8 +414,160 @@ public class CounterController implements Initializable {
      */
     @FXML
     private void mostrarPaneClientesRegistrados(ActionEvent e){
-        refresh(PaneClientesRegistrados);    
+        refresh(PaneClientesRegistrados);
+        for (model.Cliente cliente : this.counter.consultarClientes()){
+            System.out.println(cliente);
+        }
+        
     }
+    
+    /**
+     * Método que realiza el registro de un cliente
+     * @param e Action Event
+     */
+    @FXML
+    private void registrarCliente(ActionEvent e){
+        
+        String nombre = nombreCliente.getText();
+        String cedula = cedulaCliente.getText();
+        String correo = direccionCorreoCliente.getText();
+        String direccion = direccionCliente.getText();
+        String telefono = telefonoCliente.getText();
+        String sexo = ((RadioButton) this.tgGroup.getSelectedToggle()).getText();
+        int dia = Integer.parseInt((String) this.dia.getValue());
+        int mes = Integer.parseInt((String) this.mes.getValue());
+        int anno = Integer.parseInt((String) this.anio.getValue());
+        
+        
+        if(!validaNombre(nombre)){
+            mensajeRegistroCliente.setText("El nombre ingresado no es válido");
+            mensajeRegistroCliente.setVisible(true);
+        } else if(!validaCedulaFisica(cedula)){
+            mensajeRegistroCliente.setText("El número de cédula fisica debe estar compuesto por 9 digitos, incluyendo los ceros");
+            mensajeRegistroCliente.setVisible(true);
+        } else if(!validacionCorreo(correo)){
+            mensajeRegistroCliente.setText("El correo ingresado no tiene un formato válido");
+            mensajeRegistroCliente.setVisible(true);
+        } else if(!validacionNumeroTelefono(telefono)){
+            mensajeRegistroCliente.setText("El número de telefóno no es válido");
+            mensajeRegistroCliente.setVisible(true);
+        }//FALTA VALIDAR LA ENTRADA DE GENERO Y FECHA DE NACIMIENTO
+        else{
+            int numCasillero = this.counter.registrarCliente(cedula, nombre, correo, telefono, direccion, sexo, dia, mes, anno);
+            if (numCasillero != 0){
+                mensajeRegistroCliente.setText("Cliente registrado con éxito. Se le asignó el casillero número: " + numCasillero);
+                nombreCliente.setText("");
+                cedulaCliente.setText("");
+                direccionCorreoCliente.setText("");
+                direccionCliente.setText("");
+                telefonoCliente.setText("");
+                tgGroup.selectToggle(null);
+                this.dia.setValue(null);
+                this.mes.setValue(null);
+                this.anio.setValue(null);
+            } else{
+                mensajeRegistroCliente.setText("Ya hay un cliente registrado con ese número de cédula");
+            }
+        }
+    }
+    
+    /**
+     * Metódo que realiza la consulta de un cliente
+     * @param e Action event 
+     */
+    @FXML
+    private void consultarCliente(ActionEvent e){
+        String inpCedula = cedulaClienteConsulta.getText();
+        
+        if(!validaCedulaFisica(inpCedula)){
+            mensajeConsultaCliente.setText("El número de cédula es inválido");
+        } else{
+            mensajeConsultaCliente.setText(this.counter.consultarCliente(inpCedula));
+        }
+    }
+    
+        /**
+     * Metódo que realiza la consulta de un cliente para modificar
+     * @param e Action event 
+     */
+    @FXML
+    private void consultarClienteM(ActionEvent e){
+        refresh(PaneConsultarCliente, mensajeConsultaCliente);
+        String inpCedula = cedulaClienteConsulta.getText();
+        
+        if(!validaCedulaFisica(inpCedula)){
+            mensajeConsultaCliente.setText("El número de cédula es inválido");
+        } else{
+            mensajeConsultaCliente.setText(this.counter.consultarCliente(inpCedula));
+            model.Cliente consultado = this.counter.getCliente(inpCedula);
+            
+            if (consultado != null){
+                nombreCliente.setText(consultado.getNombre());
+                direccionCorreoCliente.setText(consultado.getCorreo());
+                direccionCliente.setText(consultado.getDireccion());
+                telefonoCliente.setText(consultado.getTelefono());
+                if (consultado.getSexo() == "Masculino"){
+                    this.tgGroup.getToggles().get(0).setSelected(true);
+                }
+                this.dia.getSelectionModel().select(consultado.getFechaNacimiento().getDay());
+                this.mes.getSelectionModel().select(consultado.getFechaNacimiento().getMonth()+1);
+                this.anio.getSelectionModel().select(consultado.getFechaNacimiento().getYear()+1900);
+            }
+        }
+    }
+    
+    /**
+     * Método que modifica la información de un cliente
+     * @param e 
+     */
+    @FXML
+    private void modificarCliente(ActionEvent e){
+        //refresh(PaneModificarCliente, mensajeModifica);
+        String cedula = cedulaModifica.getText();
+        String nombre = nombreCliente.getText();
+        String correo = direccionCorreoCliente.getText();
+        String direccion = direccionCliente.getText();
+        String telefono = telefonoCliente.getText();
+        String sexo = ((RadioButton) this.tgGroup.getSelectedToggle()).getText();
+        int dia = Integer.parseInt((String) this.dia.getValue());
+        int mes = Integer.parseInt((String) this.mes.getValue());
+        int anno = Integer.parseInt((String) this.anio.getValue());
+        int numCasillero =  this.counter.modificarCliente(cedula, nombre, correo, telefono, direccion, sexo, dia, mes, anno);
+        if (numCasillero != 0){
+            mensajeRegistroCliente.setText("Cliente modificado con éxito. Su número de casillero es: " + numCasillero);
+            nombreCliente.setText("");
+            cedulaCliente.setText("");
+            direccionCorreoCliente.setText("");
+            direccionCliente.setText("");
+            telefonoCliente.setText("");
+            tgGroup.selectToggle(null);
+            this.dia.setValue(null);
+            this.mes.setValue(null);
+            this.anio.setValue(null);
+        }
+    }
+    
+    /**
+     * Método que modifica la información de un cliente
+     * @param e action event
+     */
+    @FXML
+    private void eliminarCliente(ActionEvent e){
+        String cedula = clienteAEliminar.getText();
+        
+        if(!validaCedulaFisica(cedula)){
+            mensajeEliminado.setText("El número de cédula es inválido");
+        }
+        else{
+            this.counter.eliminarCliente(cedula);
+            mensajeEliminado.setText("Cliente eliminado con éxito");
+        }
+    }
+    
+    
+    /* ***************************************************************************************************
+       ********************************** Administración de Artículos ************************************
+       *************************************************************************************************** */
     
     /**
      * Metodo que muestra la ventana de Sobre
@@ -300,7 +593,7 @@ public class CounterController implements Initializable {
      */
     @FXML
     private void mostrarRevista(ActionEvent e){
-        refresh(Revista);    
+        refresh(Revista, mensajeRevista);    
     }
     
     /**
@@ -311,6 +604,87 @@ public class CounterController implements Initializable {
     private void mostrarRetirar(ActionEvent e){
         refresh(Retirar);    
     }
+    
+    /**
+     * Método que registra una revista
+     * @param e action event
+     */
+    @FXML
+    private void registraRevista(ActionEvent e){
+        String remitente = remitenteRevista.getText();
+        String descripcion = descripcionRevista.getText();
+        String nombre = nombreRevista.getText();
+        
+        if(!validaNombre(remitente)){
+            mensajeRevista.setText("El nombre de remitente es inválido");
+        }
+        else if (descripcion==null){
+            mensajeRevista.setText("Debe de tener una descripción");
+        }
+        else if (!validaNombreNumero(nombre)){
+            mensajeRevista.setText("El nombre de revista es inválido");
+        }
+        else{
+            //this.counter.enviarArticulo(nombre, descripcion, remitente, nombre, true, TTemaRevista.Moda)
+        }
+    }
+    /**
+     * Método que registra una revista
+     * @param e action event
+     */
+    @FXML
+    private void registraSobre(ActionEvent e){
+        String remitente = remitenteSobre.getText();
+        String descripcion = descripcionSobre.getText();
+        String peso = pesoSobre.getText();
+        
+        if(!validaNombre(remitente)){
+            mensajeSobre.setText("El nombre de remitente es inválido");
+            mensajeSobre.setVisible(true);
+        }
+        else if (descripcion==null){
+            mensajeSobre.setText("Debe de tener una descripción");
+            mensajeSobre.setVisible(true);
+        }
+        else if (validaNumeroDouble(peso)){
+            mensajeSobre.setText("El peso del sobre es inválido, debe ser un dato flotante");
+            mensajeSobre.setVisible(true);
+        }
+        else{
+            Sobre.setVisible(false);
+        }
+    }
+    
+    /**
+     * Método que realiza el registro de un paquete 
+     * @param e action event 
+     */
+    @FXML
+    private void registraPaquete(ActionEvent e){
+        String remitente = remitentePaquete.getText();
+        String descripcion = descripcionPaquete.getText();
+        String peso = pesoPaquete.getText();
+        
+        if(!validaNombre(remitente)){
+            mensajePaquete.setText("El nombre de remitente es inválido");
+            mensajePaquete.setVisible(true);
+        }
+        else if (descripcion==null){
+            mensajePaquete.setText("Debe de tener una descripción");
+            mensajePaquete.setVisible(true);
+        }
+        else if (validaNumeroDouble(peso)){
+            mensajePaquete.setText("El peso del sobre es inválido, debe ser un dato flotante");
+            mensajePaquete.setVisible(true);
+        }
+        else{
+            Paquete.setVisible(false);
+        }
+    }
+    
+    /* ****************************************************************************************************
+       ************************************ Consultas de Entregables **************************************
+       **************************************************************************************************** */
     
     /**
      * Metodo que muestra la ventana de Estado del casillero
@@ -358,24 +732,6 @@ public class CounterController implements Initializable {
     }
     
     /**
-     * Metodo que muestra la ventana de Compra del dolar
-     * @param e Action a realizar
-     */
-    @FXML
-    private void mostrarCompraDolar(ActionEvent e){
-        refresh(CompraDolar);    
-    }
-    
-    /**
-     * Metodo que muestra la ventana de Venta del dolar
-     * @param e Action a realizar
-     */
-    @FXML
-    private void mostrarVentaDolar(ActionEvent e){
-        refresh(VentaDolar);    
-    }
-    
-    /**
      * Metodo que muestra la ventana de Clientes con paquetes pendientes
      * @param e Action a realizar
      */
@@ -391,231 +747,6 @@ public class CounterController implements Initializable {
     @FXML
     private void mostrarDineroRecaudadoFecha(ActionEvent e){
         refresh(DineroRecaudadoFecha);    
-    }
-    
-    /**
-     * Método que crea el counter
-     * @param e Action event 
-     */
-    @FXML
-    private void crearCounter(ActionEvent e){
-        
-        refresh(panel);
-        mensaje.setVisible(false);
-        String nombre = nombreCounter.getText();
-        String cedula = cedulaCounter.getText();
-        String direccion = direccionCounter.getText();
-        String cantidad = cantidadCounter.getText();
-        
-        if(!validaNombre(nombre)){
-            mensaje.setText("El nombre ingresado no es válido");
-            mensaje.setVisible(true);
-        } else if(!validaCedula(cedula)){
-            mensaje.setText("El número de cédula jurídico debe estar compuesto por 10 digitos");
-            mensaje.setVisible(true);
-        } else if(!validaNumero(cantidad)){
-            mensaje.setText("La cantidad de espacios del counter, debe ser un número entero");
-            mensaje.setVisible(true);
-        } else if(!validaNombre(direccion)){
-            mensaje.setText("Se debe ingresar una dirección");
-            mensaje.setVisible(true);
-        } else{
-            int cantidadCasilleros = Integer.parseInt(cantidad);
-            this.counter = new Counter(nombre, cedula, direccion, cantidadCasilleros);
-            quitarPaneCounter();
-        }
-    }
-    
-    /**
-     * Método que realiza el registro de un cliente
-     * @param e Action Event
-     */
-    @FXML
-    private void registrarCliente(ActionEvent e){
-        refresh(PaneRegistrarCliente);
-        
-        String nombre = nombreCliente.getText();
-        String cedula = cedulaCliente.getText();
-        String correo = direccionCorreoCliente.getText();
-        String telefono = telefonoCliente.getText();
-        
-        if(!validaNombre(nombre)){
-            mensajeRegistroCliente.setText("El nombre ingresado no es válido");
-            mensajeRegistroCliente.setVisible(true);
-        } else if(!validaCedulaFisica(cedula)){
-            mensajeRegistroCliente.setText("El número de cédula fisica debe estar compuesto por 9 digitos, incluyendo los ceros");
-            mensajeRegistroCliente.setVisible(true);
-        } else if(!validacionCorreo(correo)){
-            mensajeRegistroCliente.setText("El correo ingresado no tiene un formato válido");
-            mensajeRegistroCliente.setVisible(true);
-        } else if(!validacionNumeroTelefono(telefono)){
-            mensajeRegistroCliente.setText("El número de telefóno no es válido");
-            mensajeRegistroCliente.setVisible(true);
-        }//FALTA VALIDAR LA ENTRADA DE GENERO Y FECHA DE NACIMIENTO
-        else{
-            int numCasillero = this.counter.registrarCliente(nombre, cedula, correo, telefono, "", "", 29, 9, 1999);
-            if (numCasillero != 0){
-                mensajeRegistroCliente.setText("Cliente registrado con éxito. Se le asignó el casillero número: " + numCasillero);
-                nombreCliente.setText("");
-                cedulaCliente.setText("");
-                direccionCorreoCliente.setText("");
-                telefonoCliente.setText("");
-                PaneRegistrarCliente.setVisible(false);
-            } else{
-                mensajeRegistroCliente.setText("Ya hay un cliente registrado con ese número de cédula");
-            }
-        }
-    }
-    
-    /**
-     * Metódo que realiza la consulta de un cliente
-     * @param e Action event 
-     */
-    @FXML
-    private void consultarCliente(ActionEvent e){
-        refresh(PaneConsultarCliente);
-        String cedula = cedulaClienteConsulta.getText();
-        
-        if(!validaCedula(cedula)){
-            mensajeConsultaCliente.setText("El número de cédula es inválido");
-            mensajeConsultaCliente.setVisible(true);
-            //OJO FALTA VALIDAR QUE EL CLIENTE EXISTA EN EL SISTEMA
-        }
-        else{
-            //Debe de mostrarse el tableview
-            
-            //OJO   OJO     OJO
-            
-            
-            //OJO   OJO     OJO
-            
-            
-            //OJO   OJO     OJO
-        }
-    }
-    
-    /**
-     * Método que modifica la información de un cliente
-     * @param e 
-     */
-    @FXML
-    private void modificarCliente(ActionEvent e){
-        refresh(PaneModificarCliente);
-        String cedula = cedulaModifica.getText();
-        
-        if(!validaCedula(cedula)){
-            mensajeModifica.setText("El número de cédula es inválido");
-            mensajeModifica.setVisible(true);
-        }
-        else{
-            paneCambiarDatosCliente.setVisible(true);
-            
-            //FALTA MODIFICAR EL PANE EN EL QUE
-            
-            //SE VAN A REALIZAR LOS CAMBIOS 
-        }
-    }
-    
-    /**
-     * Método que modifica la información de un cliente
-     * @param e action event
-     */
-    @FXML
-    private void eliminarCliente(ActionEvent e){
-        refresh(PaneEliminarCliente);
-        String cedula = clienteAEliminar.getText();
-        
-        if(!validaCedula(cedula)){
-            mensajeEliminado.setText("El número de cédula es inválido");
-            mensajeEliminado.setVisible(true);
-        }
-        else{
-            //ELIMINARLO DEL SISTEMA, COMO TAL
-            mensajeEliminado.setText("Cliente eliminado con éxito");
-            mensajeEliminado.setVisible(true);
-        }
-    }
-    /**
-     * Método que registra una revista
-     * @param e action event
-     */
-    @FXML
-    private void registraRevista(ActionEvent e){
-        refresh(Revista);
-        String remitente = remitenteRevista.getText();
-        String descripcion = descripcionRevista.getText();
-        String nombre = nombreRevista.getText();
-        
-        if(!validaNombre(remitente)){
-            mensajeRevista.setText("El nombre de remitente es inválido");
-            mensajeRevista.setVisible(true);
-        }
-        else if (descripcion==null){
-            mensajeRevista.setText("Debe de tener una descripción");
-            mensajeRevista.setVisible(true);
-        }
-        else if (!validaNombreNumero(nombre)){
-            mensajeRevista.setText("El nombre de revista es inválido");
-            mensajeRevista.setVisible(true);
-        }
-        else{
-            Revista.setVisible(false);
-        }
-    }
-    /**
-     * Método que registra una revista
-     * @param e action event
-     */
-    @FXML
-    private void registraSobre(ActionEvent e){
-        refresh(Sobre);
-        String remitente = remitenteSobre.getText();
-        String descripcion = descripcionSobre.getText();
-        String peso = pesoSobre.getText();
-        
-        if(!validaNombre(remitente)){
-            mensajeSobre.setText("El nombre de remitente es inválido");
-            mensajeSobre.setVisible(true);
-        }
-        else if (descripcion==null){
-            mensajeSobre.setText("Debe de tener una descripción");
-            mensajeSobre.setVisible(true);
-        }
-        else if (validaNumeroDouble(peso)){
-            mensajeSobre.setText("El peso del sobre es inválido, debe ser un dato flotante");
-            mensajeSobre.setVisible(true);
-        }
-        else{
-            Sobre.setVisible(false);
-        }
-    }
-    
-    /**
-     * Método que realiza el registro de un paquete 
-     * @param e action event 
-     */
-    @FXML
-    private void registraPaquete(ActionEvent e){
-        refresh(Paquete);
-        String remitente = remitentePaquete.getText();
-        String descripcion = descripcionPaquete.getText();
-        String peso = pesoPaquete.getText();
-        
-        if(!validaNombre(remitente)){
-            mensajePaquete.setText("El nombre de remitente es inválido");
-            mensajePaquete.setVisible(true);
-        }
-        else if (descripcion==null){
-            mensajePaquete.setText("Debe de tener una descripción");
-            mensajePaquete.setVisible(true);
-        }
-        else if (validaNumeroDouble(peso)){
-            mensajePaquete.setText("El peso del sobre es inválido, debe ser un dato flotante");
-            mensajePaquete.setVisible(true);
-        }
-        else{
-            Paquete.setVisible(false);
-        }
     }
     
    /**
@@ -668,33 +799,10 @@ public class CounterController implements Initializable {
         
     }
     
-    /**
-     * Metodo para modificar la cantidad y procentaje para subir de nivel
-     * @param e action event
-     */
-    @FXML
-    private void modificarParametros(ActionEvent e){
-        refresh(ModificarSistema);
-        
-        String cantidad = modificarCantidad.getText();
-        String porcentajeParaSubirNivel = porcentaje.getText();
-        
-        if (!validaNumero(cantidad)){
-            mensajeModificar.setText("La cantidad ingresada no es correcta");
-            mensajeModificar.setVisible(true);
-        }
-        else if (!validaNumero(porcentajeParaSubirNivel)){
-                mensajeModificar.setText("El porcentaje ingresado no es correcto");
-                mensajeModificar.setVisible(true);
-        }
-        else{
-            ModificarSistema.setVisible(false);
-        }
- 
-    }
       
-    // ****************************************************************************
-    // ********************* Métodos de validaciones ******************************
+    /* ****************************************************************************
+       ********************* Métodos de validaciones ******************************
+       **************************************************************************** */
     
     /**
      * Metodo que valida un nombre 
