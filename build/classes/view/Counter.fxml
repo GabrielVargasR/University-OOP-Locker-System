@@ -329,7 +329,7 @@
                </font>
             </Label>
             <TextField fx:id="cedulaModifica" layoutX="406.0" layoutY="44.0" prefHeight="25.0" prefWidth="196.0" />
-            <Button layoutX="602.0" layoutY="44.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Modificar" />
+            <Button layoutX="602.0" layoutY="44.0" mnemonicParsing="false" onAction="#modificarCliente" prefHeight="25.0" prefWidth="100.0" text="Modificar" />
             <Pane fx:id="paneCambiarDatosCliente" layoutY="69.0" prefHeight="291.0" prefWidth="893.0">
                <children>
                   <TextField fx:id="direccionCorreoCliente1" layoutX="232.0" layoutY="105.0" prefHeight="25.0" prefWidth="368.0" />

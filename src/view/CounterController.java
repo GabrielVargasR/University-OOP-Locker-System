@@ -337,7 +337,11 @@ public class CounterController implements Initializable {
      */
     @FXML
     private void mostrarModificarSistema(ActionEvent event){
-        refresh(ModificarSistema);   
+        refresh(ModificarSistema);
+        
+        modificarCantidad.setText(Integer.toString(this.cantidadSiguienteNivel));
+        tfPorcentajePlata.setText(Integer.toString(this.porcentajePlata));
+        tfPorcentajeOro.setText(Integer.toString(this.porcentajeOro));
     }
     
     /**
@@ -346,7 +350,6 @@ public class CounterController implements Initializable {
      */
     @FXML
     private void modificarParametros(ActionEvent e){
-        refresh(ModificarSistema, mensajeModificar);
         
         String cantidad = modificarCantidad.getText();
         String inpPorcentajePlata = this.tfPorcentajePlata.getText();
@@ -383,7 +386,7 @@ public class CounterController implements Initializable {
      */
     @FXML
     private void mostrarPaneConsultarCliente(ActionEvent e){
-        refresh(PaneConsultarCliente);    
+        refresh(PaneConsultarCliente, mensajeConsultaCliente);    
     }
     
     /**
@@ -392,7 +395,7 @@ public class CounterController implements Initializable {
      */
     @FXML
     private void mostrarPaneModificarCliente(ActionEvent e){
-        refresh(PaneModificarCliente);    
+        refresh(PaneModificarCliente, mensajeRegistroCliente);    
     }
 
     /**
@@ -401,7 +404,7 @@ public class CounterController implements Initializable {
      */
     @FXML
     private void mostrarPaneEliminarCliente(ActionEvent e){
-        refresh(PaneEliminarCliente);    
+        refresh(PaneEliminarCliente, mensajeEliminado);    
     }
     
     /**
@@ -449,7 +452,7 @@ public class CounterController implements Initializable {
             mensajeRegistroCliente.setVisible(true);
         }//FALTA VALIDAR LA ENTRADA DE GENERO Y FECHA DE NACIMIENTO
         else{
-            int numCasillero = this.counter.registrarCliente(nombre, cedula, correo, telefono, direccion, sexo, dia, mes, anno);
+            int numCasillero = this.counter.registrarCliente(cedula, nombre, correo, telefono, direccion, sexo, dia, mes, anno);
             if (numCasillero != 0){
                 mensajeRegistroCliente.setText("Cliente registrado con éxito. Se le asignó el casillero número: " + numCasillero);
                 nombreCliente.setText("");
@@ -473,13 +476,42 @@ public class CounterController implements Initializable {
      */
     @FXML
     private void consultarCliente(ActionEvent e){
-        refresh(PaneConsultarCliente, mensajeConsultaCliente);
-        String cedula = cedulaClienteConsulta.getText();
+        String inpCedula = cedulaClienteConsulta.getText();
         
-        if(!validaCedulaFisica(cedula)){
+        if(!validaCedulaFisica(inpCedula)){
             mensajeConsultaCliente.setText("El número de cédula es inválido");
         } else{
-            System.out.println(this.counter.consultarCliente(cedula));
+            mensajeConsultaCliente.setText(this.counter.consultarCliente(inpCedula));
+        }
+    }
+    
+        /**
+     * Metódo que realiza la consulta de un cliente para modificar
+     * @param e Action event 
+     */
+    @FXML
+    private void consultarClienteM(ActionEvent e){
+        refresh(PaneConsultarCliente, mensajeConsultaCliente);
+        String inpCedula = cedulaClienteConsulta.getText();
+        
+        if(!validaCedulaFisica(inpCedula)){
+            mensajeConsultaCliente.setText("El número de cédula es inválido");
+        } else{
+            mensajeConsultaCliente.setText(this.counter.consultarCliente(inpCedula));
+            model.Cliente consultado = this.counter.getCliente(inpCedula);
+            
+            if (consultado != null){
+                nombreCliente.setText(consultado.getNombre());
+                direccionCorreoCliente.setText(consultado.getCorreo());
+                direccionCliente.setText(consultado.getDireccion());
+                telefonoCliente.setText(consultado.getTelefono());
+                if (consultado.getSexo() == "Masculino"){
+                    this.tgGroup.getToggles().get(0).setSelected(true);
+                }
+                this.dia.getSelectionModel().select(consultado.getFechaNacimiento().getDay());
+                this.mes.getSelectionModel().select(consultado.getFechaNacimiento().getMonth()+1);
+                this.anio.getSelectionModel().select(consultado.getFechaNacimiento().getYear()+1900);
+            }
         }
     }
     
@@ -489,16 +521,28 @@ public class CounterController implements Initializable {
      */
     @FXML
     private void modificarCliente(ActionEvent e){
-        refresh(PaneModificarCliente);
+        //refresh(PaneModificarCliente, mensajeModifica);
         String cedula = cedulaModifica.getText();
-        
-        if(!validaCedulaFisica(cedula)){
-            mensajeModifica.setText("El número de cédula es inválido");
-            mensajeModifica.setVisible(true);
-        }
-        else{
-            System.out.println(cedula);
-            paneCambiarDatosCliente.setVisible(true);
+        String nombre = nombreCliente.getText();
+        String correo = direccionCorreoCliente.getText();
+        String direccion = direccionCliente.getText();
+        String telefono = telefonoCliente.getText();
+        String sexo = ((RadioButton) this.tgGroup.getSelectedToggle()).getText();
+        int dia = Integer.parseInt((String) this.dia.getValue());
+        int mes = Integer.parseInt((String) this.mes.getValue());
+        int anno = Integer.parseInt((String) this.anio.getValue());
+        int numCasillero =  this.counter.modificarCliente(cedula, nombre, correo, telefono, direccion, sexo, dia, mes, anno);
+        if (numCasillero != 0){
+            mensajeRegistroCliente.setText("Cliente modificado con éxito. Su número de casillero es: " + numCasillero);
+            nombreCliente.setText("");
+            cedulaCliente.setText("");
+            direccionCorreoCliente.setText("");
+            direccionCliente.setText("");
+            telefonoCliente.setText("");
+            tgGroup.selectToggle(null);
+            this.dia.setValue(null);
+            this.mes.setValue(null);
+            this.anio.setValue(null);
         }
     }
     
@@ -508,17 +552,14 @@ public class CounterController implements Initializable {
      */
     @FXML
     private void eliminarCliente(ActionEvent e){
-        refresh(PaneEliminarCliente);
         String cedula = clienteAEliminar.getText();
         
-        if(!validaCedula(cedula)){
+        if(!validaCedulaFisica(cedula)){
             mensajeEliminado.setText("El número de cédula es inválido");
-            mensajeEliminado.setVisible(true);
         }
         else{
-            //ELIMINARLO DEL SISTEMA, COMO TAL
+            this.counter.eliminarCliente(cedula);
             mensajeEliminado.setText("Cliente eliminado con éxito");
-            mensajeEliminado.setVisible(true);
         }
     }
     
