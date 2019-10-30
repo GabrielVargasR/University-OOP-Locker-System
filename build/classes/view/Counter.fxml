@@ -11,7 +11,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="618.0" prefWidth="881.0" style="-fx-background-color: #ab1111;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.CounterController">
+<AnchorPane id="AnchorPane" prefHeight="650.0" prefWidth="881.0" style="-fx-background-color: #ab1111;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.CounterController">
    <children>
       <MenuBar fx:id="menu" layoutY="2.0" prefHeight="7.0" prefWidth="896.0" visible="false">
         <menus>
@@ -110,12 +110,12 @@
       </Pane>
       <Pane fx:id="PaneRegistrarCliente" layoutX="14.0" layoutY="214.0" prefHeight="383.0" prefWidth="897.0" style="-fx-background-color: #ab1111;" visible="false">
          <children>
-            <Button layoutX="359.0" layoutY="312.0" mnemonicParsing="false" onAction="#registrarCliente" prefHeight="28.0" prefWidth="85.0" text="Registrar">
+            <Button layoutX="359.0" layoutY="350.0" mnemonicParsing="false" onAction="#registrarCliente" prefHeight="28.0" prefWidth="85.0" text="Registrar">
                <font>
                   <Font name="Bell MT" size="15.0" />
                </font>
             </Button>
-            <ChoiceBox fx:id="anio" layoutX="715.0" layoutY="275.0" prefHeight="25.0" prefWidth="62.0">
+            <ChoiceBox fx:id="anio" layoutX="715.0" layoutY="312.0" prefHeight="25.0" prefWidth="62.0">
                <items>
                   <FXCollections fx:factory="observableArrayList">
                      <String fx:value="1950" />
@@ -191,7 +191,7 @@
                   </FXCollections>
                </items>
             </ChoiceBox>
-            <ChoiceBox fx:id="mes" layoutX="638.0" layoutY="275.0" prefHeight="13.0" prefWidth="48.0">
+            <ChoiceBox fx:id="mes" layoutX="638.0" layoutY="312.0" prefHeight="13.0" prefWidth="48.0">
                <items>
                   <FXCollections fx:factory="observableArrayList">
                      <String fx:value="01" />
@@ -209,7 +209,7 @@
                   </FXCollections>
                </items>
             </ChoiceBox>
-            <ChoiceBox fx:id="dia" layoutX="563.0" layoutY="275.0" prefHeight="25.0" prefWidth="48.0">
+            <ChoiceBox fx:id="dia" layoutX="563.0" layoutY="312.0" prefHeight="25.0" prefWidth="48.0">
                <items>
                   <FXCollections fx:factory="observableArrayList">
                      <String fx:value="1" />
@@ -246,21 +246,26 @@
                   </FXCollections>
                </items>
             </ChoiceBox>
-            <Label layoutX="78.0" layoutY="277.0" text="Fecha de Nacimiento:">
+            <Label layoutX="78.0" layoutY="230.0" text="Dirección:">
                <font>
                   <Font name="Bell MT" size="17.0" />
                </font>
             </Label>
-            <Label layoutX="82.0" layoutY="230.0" text="Sexo:">
+            <Label layoutX="78.0" layoutY="312.0" text="Fecha de Nacimiento:">
                <font>
                   <Font name="Bell MT" size="17.0" />
                </font>
             </Label>
-            <RadioButton layoutX="563.0" layoutY="232.0" mnemonicParsing="false" text="Masculino">
+            <Label layoutX="82.0" layoutY="270.0" text="Sexo:">
+               <font>
+                  <Font name="Bell MT" size="17.0" />
+               </font>
+            </Label>
+            <RadioButton layoutX="563.0" layoutY="270.0" mnemonicParsing="false" text="Masculino">
                <toggleGroup>
                   <ToggleGroup fx:id="tgGroup" />
                </toggleGroup></RadioButton>
-            <RadioButton layoutX="709.0" layoutY="232.0" mnemonicParsing="false" text="Femenino" toggleGroup="$tgGroup" />
+            <RadioButton layoutX="709.0" layoutY="270.0" mnemonicParsing="false" text="Femenino" toggleGroup="$tgGroup" />
             <Label layoutX="75.0" layoutY="190.0" text="Teléfono:">
                <font>
                   <Font name="Bell MT" size="17.0" />
@@ -276,7 +281,7 @@
                   <Font name="Bell MT" size="17.0" />
                </font>
             </Label>
-            <Label layoutX="76.0" layoutY="148.0" text="Dirección de correo electrónico:">
+            <Label layoutX="76.0" layoutY="148.0" text="Correo electrónico:">
                <font>
                   <Font name="Bell MT" size="17.0" />
                </font>
@@ -285,12 +290,13 @@
             <TextField fx:id="nombreCliente" layoutX="411.0" layoutY="74.0" prefHeight="25.0" prefWidth="368.0" />
             <TextField fx:id="cedulaCliente" layoutX="593.0" layoutY="111.0" prefHeight="25.0" prefWidth="186.0" />
             <TextField fx:id="direccionCorreoCliente" layoutX="411.0" layoutY="146.0" prefHeight="25.0" prefWidth="368.0" />
+            <TextField fx:id="direccionCliente" layoutX="411.0" layoutY="230.0" prefHeight="25.0" prefWidth="368.0" />
             <Label layoutX="311.0" layoutY="17.0" text="Registrar un Cliente">
                <font>
                   <Font name="Bell MT" size="24.0" />
                </font>
             </Label>
-            <Label fx:id="mensajeRegistroCliente" layoutX="179.0" layoutY="352.0" text="" visible="false" />
+            <Label fx:id="mensajeRegistroCliente" layoutX="179.0" layoutY="400.0" text="" visible="false" />
          </children>
       </Pane>
       <Pane fx:id="PaneConsultarCliente" layoutY="251.0" prefHeight="360.0" prefWidth="893.0" style="-fx-background-color: #ab1111;" visible="false">
@@ -305,9 +311,9 @@
                   <Font name="Bell MT" size="17.0" />
                </font>
             </Label>
-            <TextField fx:id="cedulaClienteConsulta" layoutX="400.0" layoutY="68.0" prefHeight="25.0" prefWidth="196.0" />
+            <TextField fx:id="cedulaClienteConsulta" layoutX="420.0" layoutY="68.0" prefHeight="25.0" prefWidth="196.0" />
             <Button layoutX="596.0" layoutY="68.0" mnemonicParsing="false" onAction="#consultarCliente" prefHeight="17.0" prefWidth="83.0" text="Consultar" />
-            <Label fx:id="mensajeConsultaCliente" layoutX="163.0" layoutY="133.0" text="Label" visible="false" />
+            <Label fx:id="mensajeConsultaCliente" layoutX="163.0" layoutY="133.0" text="" visible="false" />
          </children>
       </Pane>
       <Pane fx:id="PaneModificarCliente" layoutX="3.0" layoutY="251.0" prefHeight="360.0" prefWidth="893.0" style="-fx-background-color: #ab1111;" visible="false">
@@ -520,7 +526,7 @@
                </font>
             </Label>
             <TextField fx:id="clienteAEliminar" layoutX="362.0" layoutY="70.0" prefHeight="25.0" prefWidth="196.0" />
-            <Label fx:id="mensajeEliminado" layoutX="251.0" layoutY="135.0" text="Label" visible="false" wrapText="true" />
+            <Label fx:id="mensajeEliminado" layoutX="251.0" layoutY="135.0" text="" visible="false" wrapText="true" />
          </children>
       </Pane>
       <Pane fx:id="PaneClientesRegistrados" layoutX="1.0" layoutY="251.0" prefHeight="360.0" prefWidth="893.0" style="-fx-background-color: #ab1111;" visible="false">
@@ -530,6 +536,8 @@
                   <Font name="Bell MT" size="24.0" />
                </font>
             </Label>
+            <ChoiceBox layoutX="315.0" layoutY="30.0">  
+            </ChoiceBox>     
          </children>
       </Pane>
       <Pane fx:id="Sobre" layoutX="-1.0" layoutY="251.0" prefHeight="360.0" prefWidth="897.0" style="-fx-background-color: #ab1111;" visible="false">
@@ -572,7 +580,7 @@
             </Label>
             <TextField fx:id="pesoSobre" layoutX="239.0" layoutY="258.0" prefHeight="25.0" prefWidth="108.0" />
             <Button layoutX="623.0" layoutY="181.0" mnemonicParsing="false" onAction="#registraSobre" prefHeight="25.0" prefWidth="100.0" text="Registrar" />
-            <Label fx:id="mensajeSobre" layoutX="171.0" layoutY="310.0" text="Label" visible="false" />
+            <Label fx:id="mensajeSobre" layoutX="171.0" layoutY="310.0" text="" visible="false" />
          </children>
       </Pane>
       <Pane fx:id="Paquete" layoutX="3.0" layoutY="251.0" prefHeight="360.0" prefWidth="893.0" style="-fx-background-color: #ab1111;" visible="false">
@@ -622,7 +630,7 @@
             </Label>
             <RadioButton layoutX="548.0" layoutY="251.0" mnemonicParsing="false" text="No" />
             <RadioButton layoutX="465.0" layoutY="251.0" mnemonicParsing="false" text="Si" />
-            <Label fx:id="mensajePaquete" layoutX="118.0" layoutY="319.0" text="Label" visible="false" />
+            <Label fx:id="mensajePaquete" layoutX="118.0" layoutY="319.0" text="" visible="false" />
          </children>
       </Pane>
       <Pane fx:id="Revista" layoutX="-1.0" layoutY="251.0" prefHeight="360.0" prefWidth="897.0" style="-fx-background-color: #ab1111;" visible="false">
@@ -669,7 +677,7 @@
             <RadioButton layoutX="674.0" layoutY="261.0" mnemonicParsing="false" text="Cocina" />
             <RadioButton layoutX="558.0" layoutY="261.0" mnemonicParsing="false" text="Salud/Medicina" />
             <RadioButton layoutX="745.0" layoutY="260.0" mnemonicParsing="false" text="Otro" />
-            <Label fx:id="mensajeRevista" layoutX="157.0" layoutY="323.0" text="Label" />
+            <Label fx:id="mensajeRevista" layoutX="157.0" layoutY="323.0" text="" />
          </children>
       </Pane>
       <Pane fx:id="Retirar" layoutX="2.0" layoutY="251.0" prefHeight="360.0" prefWidth="893.0" style="-fx-background-color: #ab1111;" visible="false">
@@ -729,7 +737,7 @@
             </ChoiceBox>
             <ListView layoutX="600.0" layoutY="81.0" prefHeight="181.0" prefWidth="247.0" />
             <Button layoutX="691.0" layoutY="272.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="66.0" text="Listo" />
-            <Label fx:id="mensajeRetirar" layoutX="138.0" layoutY="312.0" text="Label" />             
+            <Label fx:id="mensajeRetirar" layoutX="138.0" layoutY="312.0" text="" />             
          </children>
       </Pane>
       <Pane fx:id="EstadoCasillero" layoutX="3.0" layoutY="251.0" prefHeight="360.0" prefWidth="893.0" style="-fx-background-color: #ab1111;" visible="false">
@@ -752,7 +760,7 @@
             <TextField fx:id="consultaNumeroCliente" layoutX="438.0" layoutY="68.0" />
             <TextField fx:id="consultaNumeroCasillero" layoutX="438.0" layoutY="104.0" />
             <Button layoutX="615.0" layoutY="81.0" mnemonicParsing="false" text="Consultar" />
-            <Label fx:id="mensajeEstadoCasillero" layoutX="221.0" layoutY="260.0" text="Label" visible="false" />
+            <Label fx:id="mensajeEstadoCasillero" layoutX="221.0" layoutY="260.0" text="" visible="false" />
          </children>
       </Pane>
       <Pane fx:id="ArticulosRecibidosFecha" layoutX="1.0" layoutY="251.0" prefHeight="360.0" prefWidth="893.0" style="-fx-background-color: #ab1111;" visible="false">
@@ -1105,11 +1113,21 @@
                   <Font name="Bell MT" size="24.0" />
                </font>
             </Label>
+            <Label fx:id="labCompra" layoutX="350.0" layoutY="40.0" text="Compra del Dolar">
+               <font>
+                  <Font name="Bell MT" size="24.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
       <Pane fx:id="VentaDolar" layoutX="-1.0" layoutY="251.0" prefHeight="360.0" prefWidth="897.0" style="-fx-background-color: #ab1111;" visible="false">
          <children>
             <Label layoutX="350.0" layoutY="14.0" text="Venta del Dolar">
+               <font>
+                  <Font name="Bell MT" size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="labVenta" layoutX="350.0" layoutY="40.0" text="">
                <font>
                   <Font name="Bell MT" size="24.0" />
                </font>
@@ -1128,15 +1146,21 @@
                   <Font name="Bell MT" size="17.0" />
                </font>
             </Label>
-            <Label layoutX="60.0" layoutY="170.0" text="Porcentaje de descuento:">
+            <Label layoutX="60.0" layoutY="170.0" text="Descuento clientes Plata:">
+               <font>
+                  <Font name="Bell MT" size="17.0" />
+               </font>
+            </Label>
+            <Label layoutX="60.0" layoutY="200.0" text="Descuento clientes Oro:">
                <font>
                   <Font name="Bell MT" size="17.0" />
                </font>
             </Label>
             <TextField fx:id="modificarCantidad" layoutX="495.0" layoutY="90.0" />
-            <TextField fx:id="porcentaje" layoutX="495.0" layoutY="168.0" />
+            <TextField fx:id="tfPorcentajePlata" layoutX="495.0" layoutY="168.0" />
+            <TextField fx:id="tfPorcentajeOro" layoutX="495.0" layoutY="200.0" />
             <Button layoutX="404.0" layoutY="303.0" mnemonicParsing="false" onAction="#modificarParametros" prefHeight="25.0" prefWidth="89.0" text="Cambiar" />
-            <Label fx:id="mensajeModificar" layoutX="125.0" layoutY="229.0" text="Label" visible="false" />
+            <Label fx:id="mensajeModificar" layoutX="125.0" layoutY="229.0" text="" visible="false" />
          </children>
       </Pane>
       <Pane fx:id="ClientesPaquetesPendientes" layoutX="-1.0" layoutY="258.0" prefHeight="360.0" prefWidth="897.0" style="-fx-background-color: #ab1111;" visible="false">
